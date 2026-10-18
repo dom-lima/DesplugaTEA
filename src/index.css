@@ -803,13 +803,54 @@ body {
 [data-theme="dark"] {
   --bg-app: #18181b;
   --bg-card: #27272a;
-  --bg-inner: #18181b;
+  --bg-inner: #1f1f23;
+  --bg-inner-strong: #27272c;
   --border-card: #3f3f46;
   --border-subtle: #27272a;
   --text-primary: #f4f4f5;
   --text-secondary: #d4d4d8;
   --text-muted: #a1a1aa;
   --accent-readable: #2dd4bf;
+}
+
+/* ----------------------------------------------------------------------------
+   AJUSTE DE CONFORTO VISUAL: BOLHAS E FISSURA NO MODO ESCURO
+   Substitui o contraste excessivo por um tom mineral/sálvia suave (#63776c),
+   eliminando ofuscamento, reflexos duros e cansaço visual.
+   ---------------------------------------------------------------------------- */
+[data-theme="dark"] .bubble-popped-crater {
+  background-color: #19191d !important;
+  border-color: #33333a !important;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .bubble-fissure-line {
+  color: #63776c !important; /* Tom ameno, mineral e confortável para os olhos */
+}
+
+[data-theme="dark"] .bubble-fissure-line path {
+  stroke: #63776c !important;
+  opacity: 0.85 !important;
+}
+
+[data-theme="dark"] .bubble-fissure-line polygon {
+  fill: #63776c !important;
+  opacity: 0.22 !important;
+}
+
+[data-theme="dark"] .bubble-burst-particle {
+  background-color: #63776c !important;
+  opacity: 0.55 !important;
+}
+
+[data-theme="dark"] .bubble-intact-dome {
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.06) 30%, #29292e 65%, #1e1e22 100%) !important;
+  border-color: #3f3f46 !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.35), inset 0 1px 2px rgba(255,255,255,0.18) !important;
+}
+
+[data-theme="dark"] .bubble-ping-indicator {
+  border-color: rgba(99, 119, 108, 0.4) !important;
 }
 
 /* ----------------------------------------------------------------------------

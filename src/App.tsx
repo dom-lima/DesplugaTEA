@@ -335,20 +335,16 @@ export default function App() {
   const filterNodeRef = useRef<BiquadFilterNode | null>(null);
 
   // Tema Visual Neurodivergente (Paletas Pastéis de Alta Legibilidade por Padrão)
-  const [currentTheme, setCurrentTheme] = useState<ThemeId>(() => {
-    const saved = safeStorage.getItem("desplugatea_theme");
-    if (saved && ["sage", "sky", "lavender", "sand", "dark"].includes(saved)) {
-      return saved as ThemeId;
-    }
-    return "sage";
-  });
+  // Tema padrão fixo ao abrir o aplicativo: sempre Sálvia & Menta ("sage")
+  const [currentTheme, setCurrentTheme] = useState<ThemeId>("sage");
   const [showPaletteModal, setShowPaletteModal] = useState<boolean>(false);
 
   // Sincronizar data-theme no elemento raiz do documento
   useEffect(() => {
     if (typeof document !== "undefined") {
       document.documentElement.setAttribute("data-theme", currentTheme);
-      safeStorage.setItem("desplugatea_theme", currentTheme);
+      // Remove resíduos antigos em localStorage para garantir abertura sempre em Sálvia & Menta
+      safeStorage.removeItem("desplugatea_theme");
     }
   }, [currentTheme]);
 
@@ -643,12 +639,8 @@ export default function App() {
         // Define as recomendações automáticas de ferramentas com base no texto sorteado e tipo de gatilho
         setRecommendedTools(getRecommendationsForAdvice(advice, triggerId));
       }
+      // Finaliza o carregamento do conselho sorteado sem mover a tela
       setLoading(false);
-
-      // Scroll suave e calmo para centralizar a dica sem pulos de tela agressivos
-      setTimeout(() => {
-        document.getElementById("refugio-box")?.scrollIntoView({ behavior: "smooth" });
-      }, 80);
     }, 450);
   };
 
@@ -905,7 +897,7 @@ export default function App() {
               }`}
             >
               <span className="text-3xl mb-3 select-none" aria-hidden="true">🧠</span>
-              <span className="font-bold text-[#f4f4f5] text-base">Excesso de Info</span>
+              <span className="font-bold text-[#f4f4f5] text-base">Excesso de Informação</span>
               <span className="text-xs text-[#a1a1aa] mt-1.5 leading-relaxed">Muitas demandas, notícias ou telas piscando.</span>
             </button>
 

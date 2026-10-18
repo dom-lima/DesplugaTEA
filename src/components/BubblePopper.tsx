@@ -433,7 +433,7 @@ export const BubblePopper: React.FC<BubblePopperProps> = ({ onVibrate }) => {
                   {/* ESTADO 1: INTACTA (Cúpula 3D brilhante e translúcida) */}
                   {!popped && (
                     <div 
-                      className="w-full h-full rounded-full border border-[var(--border-card,#aec3b4)] flex items-center justify-center relative overflow-hidden transition-all"
+                      className="bubble-intact-dome w-full h-full rounded-full border border-[var(--border-card,#aec3b4)] flex items-center justify-center relative overflow-hidden transition-all"
                       style={{
                         background: "radial-gradient(circle at 35% 30%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 28%, var(--bg-card,#d9e4dc) 65%, var(--border-card,#aec3b4) 100%)",
                         boxShadow: "0 3px 6px rgba(0,0,0,0.14), inset 0 -2px 4px rgba(0,0,0,0.08), inset 0 2px 3px rgba(255,255,255,0.7)"
@@ -453,13 +453,13 @@ export const BubblePopper: React.FC<BubblePopperProps> = ({ onVibrate }) => {
                   {/* ESTADO 2: ESTOURADA ("LINHA PARTIDA" & CRATERA DESINFLADA REALISTA) */}
                   {popped && (
                     <div 
-                      className="w-full h-full rounded-full border-2 border-[var(--border-card,#aec3b4)]/80 flex items-center justify-center relative overflow-hidden transition-all bg-[var(--bg-inner-strong,#b8cdbf)] text-[var(--text-primary,#18261e)]"
+                      className="bubble-popped-crater w-full h-full rounded-full border-2 border-[var(--border-card,#aec3b4)]/80 flex items-center justify-center relative overflow-hidden transition-all bg-[var(--bg-inner-strong,#b8cdbf)] text-[var(--accent-readable,#1e3327)]"
                       style={{
                         boxShadow: "inset 0 3px 6px rgba(0,0,0,0.25), inset 0 1px 2px rgba(0,0,0,0.3)"
                       }}
                     >
                       {/* SVG DE LINHA PARTIDA: Rasgo de ruptura linear da esquerda para a direita com fissuras */}
-                      <div className="w-[88%] h-[88%] flex items-center justify-center text-[var(--accent-readable,#1e3327)] drop-shadow-sm pointer-events-none">
+                      <div className="bubble-fissure-line w-[88%] h-[88%] flex items-center justify-center pointer-events-none">
                         <BrokenLinePattern />
                       </div>
                     </div>
@@ -467,7 +467,7 @@ export const BubblePopper: React.FC<BubblePopperProps> = ({ onVibrate }) => {
 
                   {/* Indicador de último estourado */}
                   {lastPoppedIndex === idx && popped && (
-                    <span className="absolute inset-0 rounded-full border-2 border-amber-500/60 animate-ping pointer-events-none" />
+                    <span className="bubble-ping-indicator absolute inset-0 rounded-full border-2 border-emerald-500/40 animate-ping pointer-events-none" />
                   )}
                 </button>
               );
@@ -478,7 +478,7 @@ export const BubblePopper: React.FC<BubblePopperProps> = ({ onVibrate }) => {
           {particles.map(p => (
             <span
               key={p.id}
-              className="absolute pointer-events-none rounded-full bg-[var(--accent-readable,#1e3327)] transition-all duration-300"
+              className="bubble-burst-particle absolute pointer-events-none rounded-full bg-[var(--accent-readable,#1e3327)] transition-all duration-300"
               style={{
                 left: `${p.x}px`,
                 top: `${p.y}px`,
