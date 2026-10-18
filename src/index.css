@@ -5,6 +5,18 @@
 }
 
 /* Custom base styles for comfortable viewing */
+:root {
+  --bg-app: #e8eee9;
+  --bg-card: #d9e4dc;
+  --bg-inner: #cddcd1;
+  --border-card: #aec3b4;
+  --border-subtle: #bdd1c3;
+  --text-primary: #1e3327;
+  --text-secondary: #2a4234;
+  --text-muted: #3f5c4c;
+  --accent-readable: #174d34;
+}
+
 body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -24,20 +36,21 @@ body {
 }
 
 /* ============================================================================
-   PALETAS NEURODIVERGENTES CALIBRADAS — CONTRASTE SUAVE E SEM OFUSCAMENTO
-   - Sem branco puro (#ffffff) que causa ofuscamento e fadiga visual
-   - Sem preto puro (#000000) que gera contraste excessivamente agressivo
-   - Verdes escuros e profundos (#174d34) para leitura perfeita (zero verde claro ilegível)
-   - Contraste balanceado (~6.5:1 a 7.5:1) recomendado para TEA, TDAH e Irlen
+   PALETAS NEURODIVERGENTES 100% PASTÉIS — ZERO CINZA ESCURO OU CLARO
+   - Sem campos cinzas soltos ou fundos cinzas
+   - Todos os poços, recipientes, botões e campos absorvem os tons pastéis da paleta
+   - Sem branco puro (#ffffff) causador de ofuscamento e fadiga visual
+   - Tipografia em tons minerais profundos para contraste suave e alta legibilidade
    ============================================================================ */
 
 /* ----------------------------------------------------------------------------
-   1. SÁLVIA VELUDO & MENTA SERENA (SAGE)
+   1. SÁLVIA VELUDO & MENTA SERENA (SAGE) — TEMA PADRÃO
    ---------------------------------------------------------------------------- */
 [data-theme="sage"] {
   --bg-app: #e8eee9;
   --bg-card: #d9e4dc;
   --bg-inner: #cddcd1;
+  --bg-inner-strong: #c2d6c7;
   --border-card: #aec3b4;
   --border-subtle: #bdd1c3;
   --text-primary: #1e3327;
@@ -47,33 +60,71 @@ body {
 }
 
 [data-theme="sage"] .app-theme-bg,
-[data-theme="sage"] .bg-\[\#18181b\] {
+[data-theme="sage"] .bg-\[\#18181b\],
+[data-theme="sage"] .bg-\[\#18181b\]\/60,
+[data-theme="sage"] .bg-\[\#18181b\]\/70,
+[data-theme="sage"] .bg-\[\#18181b\]\/80,
+[data-theme="sage"] .bg-\[\#1f1f23\],
+[data-theme="sage"] .bg-\[\#0c0c0e\] {
   background-color: #e8eee9 !important;
   color: #1e3327 !important;
 }
 
-/* Cartões e superfícies - tom suave aveludado, NUNCA branco agressivo */
-[data-theme="sage"] .bg-\[\#27272a\] {
+/* Superfícies dos Cartões e Modais */
+[data-theme="sage"] .bg-\[\#27272a\],
+[data-theme="sage"] .modal-pastel-card {
   background-color: #d9e4dc !important;
+  border-color: #aec3b4 !important;
 }
 
-/* Recipientes internos e poços */
+/* Recipientes internos, poços, botões inativos, campos e áreas de preenchimento (100% PASTEL SÁLVIA) */
 [data-theme="sage"] .bg-slate-950,
+[data-theme="sage"] .bg-slate-950\/60,
+[data-theme="sage"] .bg-slate-900,
+[data-theme="sage"] .bg-zinc-950,
 [data-theme="sage"] .bg-zinc-900,
-[data-theme="sage"] .bg-zinc-950 {
+[data-theme="sage"] .bg-zinc-900\/50,
+[data-theme="sage"] .bg-zinc-900\/90,
+[data-theme="sage"] .bg-zinc-850,
+[data-theme="sage"] .bg-zinc-850\/70,
+[data-theme="sage"] .bg-zinc-800,
+[data-theme="sage"] .bg-zinc-800\/80,
+[data-theme="sage"] .bg-zinc-750,
+[data-theme="sage"] .bg-zinc-700 {
   background-color: #cddcd1 !important;
   border-color: #aec3b4 !important;
+  color: #1e3327 !important;
 }
 
-/* Bordas estruturais */
+/* Hover suave em elementos na paleta pastel */
+[data-theme="sage"] .hover\:bg-\[\#3f3f46\]:hover,
+[data-theme="sage"] .hover\:bg-\[\#1f1f23\]:hover,
+[data-theme="sage"] .hover\:bg-zinc-800:hover,
+[data-theme="sage"] .hover\:bg-zinc-750:hover,
+[data-theme="sage"] .hover\:bg-zinc-700:hover,
+[data-theme="sage"] .hover\:bg-zinc-850:hover,
+[data-theme="sage"] .hover\:bg-slate-900:hover,
+[data-theme="sage"] .hover\:bg-black:hover {
+  background-color: #c2d6c7 !important;
+  border-color: #9cbda8 !important;
+  color: #174d34 !important;
+}
+
+/* Bordas estruturais e divisores - Verde mineral suave (zero cinza) */
 [data-theme="sage"] .border-\[\#3f3f46\],
+[data-theme="sage"] .border-\[\#27272a\],
+[data-theme="sage"] .border-\[\#52525b\],
 [data-theme="sage"] .border-zinc-800,
-[data-theme="sage"] .border-zinc-700 {
+[data-theme="sage"] .border-zinc-800\/60,
+[data-theme="sage"] .border-zinc-800\/80,
+[data-theme="sage"] .border-zinc-700,
+[data-theme="sage"] .border-zinc-700\/60,
+[data-theme="sage"] .border-zinc-700\/70,
+[data-theme="sage"] .border-zinc-700\/80,
+[data-theme="sage"] .border-zinc-700\/90,
+[data-theme="sage"] .border-zinc-750,
+[data-theme="sage"] .border-zinc-600 {
   border-color: #aec3b4 !important;
-}
-
-[data-theme="sage"] .border-\[\#27272a\] {
-  border-color: #bdd1c3 !important;
 }
 
 /* Tipografia suave com contraste balanceado (6.5:1 a 7.5:1) */
@@ -99,7 +150,7 @@ body {
   color: #4b6657 !important;
 }
 
-/* CORREÇÃO DO VERDE: Substituto legível, profundo e mineral (NUNCA verde claro) */
+/* Substituto legível, profundo e mineral (NUNCA verde claro ilegível) */
 [data-theme="sage"] .text-\[\#2dd4bf\],
 [data-theme="sage"] .text-teal-300,
 [data-theme="sage"] .text-teal-400,
@@ -110,7 +161,7 @@ body {
   color: #174d34 !important;
 }
 
-/* Acentos de outras cores adaptados para alta legibilidade sobre pastel */
+/* Acentos adaptados para alta legibilidade sobre pastel */
 [data-theme="sage"] .text-sky-300,
 [data-theme="sage"] .text-sky-400,
 [data-theme="sage"] .text-sky-200 {
@@ -201,13 +252,6 @@ body {
   stroke: #174d34 !important;
 }
 
-[data-theme="sage"] .hover\:bg-\[\#3f3f46\]:hover,
-[data-theme="sage"] .hover\:bg-zinc-800:hover,
-[data-theme="sage"] .hover\:bg-zinc-750:hover,
-[data-theme="sage"] .hover\:bg-zinc-850:hover {
-  background-color: #cadad0 !important;
-}
-
 /* ----------------------------------------------------------------------------
    2. CÉU SUAVE & NÉVOA (SKY)
    ---------------------------------------------------------------------------- */
@@ -215,39 +259,78 @@ body {
   --bg-app: #e7edf2;
   --bg-card: #d9e3eb;
   --bg-inner: #ccdbe5;
+  --bg-inner-strong: #bdd2e1;
   --border-card: #abc0d0;
   --border-subtle: #bccfe0;
   --text-primary: #1d3040;
   --text-secondary: #293e50;
   --text-muted: #3d5469;
-  --accent-readable: #174f37;
+  --accent-readable: #165038;
 }
 
 [data-theme="sky"] .app-theme-bg,
-[data-theme="sky"] .bg-\[\#18181b\] {
+[data-theme="sky"] .bg-\[\#18181b\],
+[data-theme="sky"] .bg-\[\#18181b\]\/60,
+[data-theme="sky"] .bg-\[\#18181b\]\/70,
+[data-theme="sky"] .bg-\[\#18181b\]\/80,
+[data-theme="sky"] .bg-\[\#1f1f23\],
+[data-theme="sky"] .bg-\[\#0c0c0e\] {
   background-color: #e7edf2 !important;
   color: #1d3040 !important;
 }
 
-[data-theme="sky"] .bg-\[\#27272a\] {
+[data-theme="sky"] .bg-\[\#27272a\],
+[data-theme="sky"] .modal-pastel-card {
   background-color: #d9e3eb !important;
+  border-color: #abc0d0 !important;
 }
 
+/* Recipientes internos, poços e botões em azul pastel suave (zero cinza) */
 [data-theme="sky"] .bg-slate-950,
+[data-theme="sky"] .bg-slate-950\/60,
+[data-theme="sky"] .bg-slate-900,
+[data-theme="sky"] .bg-zinc-950,
 [data-theme="sky"] .bg-zinc-900,
-[data-theme="sky"] .bg-zinc-950 {
+[data-theme="sky"] .bg-zinc-900\/50,
+[data-theme="sky"] .bg-zinc-900\/90,
+[data-theme="sky"] .bg-zinc-850,
+[data-theme="sky"] .bg-zinc-850\/70,
+[data-theme="sky"] .bg-zinc-800,
+[data-theme="sky"] .bg-zinc-800\/80,
+[data-theme="sky"] .bg-zinc-750,
+[data-theme="sky"] .bg-zinc-700 {
   background-color: #ccdbe5 !important;
   border-color: #abc0d0 !important;
+  color: #1d3040 !important;
+}
+
+[data-theme="sky"] .hover\:bg-\[\#3f3f46\]:hover,
+[data-theme="sky"] .hover\:bg-\[\#1f1f23\]:hover,
+[data-theme="sky"] .hover\:bg-zinc-800:hover,
+[data-theme="sky"] .hover\:bg-zinc-750:hover,
+[data-theme="sky"] .hover\:bg-zinc-700:hover,
+[data-theme="sky"] .hover\:bg-zinc-850:hover,
+[data-theme="sky"] .hover\:bg-slate-900:hover,
+[data-theme="sky"] .hover\:bg-black:hover {
+  background-color: #bdd2e1 !important;
+  border-color: #9cbccc !important;
+  color: #165038 !important;
 }
 
 [data-theme="sky"] .border-\[\#3f3f46\],
+[data-theme="sky"] .border-\[\#27272a\],
+[data-theme="sky"] .border-\[\#52525b\],
 [data-theme="sky"] .border-zinc-800,
-[data-theme="sky"] .border-zinc-700 {
+[data-theme="sky"] .border-zinc-800\/60,
+[data-theme="sky"] .border-zinc-800\/80,
+[data-theme="sky"] .border-zinc-700,
+[data-theme="sky"] .border-zinc-700\/60,
+[data-theme="sky"] .border-zinc-700\/70,
+[data-theme="sky"] .border-zinc-700\/80,
+[data-theme="sky"] .border-zinc-700\/90,
+[data-theme="sky"] .border-zinc-750,
+[data-theme="sky"] .border-zinc-600 {
   border-color: #abc0d0 !important;
-}
-
-[data-theme="sky"] .border-\[\#27272a\] {
-  border-color: #bccfe0 !important;
 }
 
 [data-theme="sky"] .text-\[\#f4f4f5\],
@@ -352,13 +435,6 @@ body {
   stroke: #184a6e !important;
 }
 
-[data-theme="sky"] .hover\:bg-\[\#3f3f46\]:hover,
-[data-theme="sky"] .hover\:bg-zinc-800:hover,
-[data-theme="sky"] .hover\:bg-zinc-750:hover,
-[data-theme="sky"] .hover\:bg-zinc-850:hover {
-  background-color: #c8d7e4 !important;
-}
-
 /* ----------------------------------------------------------------------------
    3. LAVANDA VELUDO & AMETISTA (LAVENDER)
    ---------------------------------------------------------------------------- */
@@ -366,6 +442,7 @@ body {
   --bg-app: #ece7f2;
   --bg-card: #ded6e6;
   --bg-inner: #d1c7dc;
+  --bg-inner-strong: #c5b8d4;
   --border-card: #b9abc9;
   --border-subtle: #cbbddb;
   --text-primary: #2b1f38;
@@ -375,30 +452,68 @@ body {
 }
 
 [data-theme="lavender"] .app-theme-bg,
-[data-theme="lavender"] .bg-\[\#18181b\] {
+[data-theme="lavender"] .bg-\[\#18181b\],
+[data-theme="lavender"] .bg-\[\#18181b\]\/60,
+[data-theme="lavender"] .bg-\[\#18181b\]\/70,
+[data-theme="lavender"] .bg-\[\#18181b\]\/80,
+[data-theme="lavender"] .bg-\[\#1f1f23\],
+[data-theme="lavender"] .bg-\[\#0c0c0e\] {
   background-color: #ece7f2 !important;
   color: #2b1f38 !important;
 }
 
-[data-theme="lavender"] .bg-\[\#27272a\] {
+[data-theme="lavender"] .bg-\[\#27272a\],
+[data-theme="lavender"] .modal-pastel-card {
   background-color: #ded6e6 !important;
+  border-color: #b9abc9 !important;
 }
 
+/* Recipientes internos, poços e botões em lavanda pastel suave (zero cinza) */
 [data-theme="lavender"] .bg-slate-950,
+[data-theme="lavender"] .bg-slate-950\/60,
+[data-theme="lavender"] .bg-slate-900,
+[data-theme="lavender"] .bg-zinc-950,
 [data-theme="lavender"] .bg-zinc-900,
-[data-theme="lavender"] .bg-zinc-950 {
+[data-theme="lavender"] .bg-zinc-900\/50,
+[data-theme="lavender"] .bg-zinc-900\/90,
+[data-theme="lavender"] .bg-zinc-850,
+[data-theme="lavender"] .bg-zinc-850\/70,
+[data-theme="lavender"] .bg-zinc-800,
+[data-theme="lavender"] .bg-zinc-800\/80,
+[data-theme="lavender"] .bg-zinc-750,
+[data-theme="lavender"] .bg-zinc-700 {
   background-color: #d1c7dc !important;
   border-color: #b9abc9 !important;
+  color: #2b1f38 !important;
+}
+
+[data-theme="lavender"] .hover\:bg-\[\#3f3f46\]:hover,
+[data-theme="lavender"] .hover\:bg-\[\#1f1f23\]:hover,
+[data-theme="lavender"] .hover\:bg-zinc-800:hover,
+[data-theme="lavender"] .hover\:bg-zinc-750:hover,
+[data-theme="lavender"] .hover\:bg-zinc-700:hover,
+[data-theme="lavender"] .hover\:bg-zinc-850:hover,
+[data-theme="lavender"] .hover\:bg-slate-900:hover,
+[data-theme="lavender"] .hover\:bg-black:hover {
+  background-color: #c5b8d4 !important;
+  border-color: #aea0c4 !important;
+  color: #174f35 !important;
 }
 
 [data-theme="lavender"] .border-\[\#3f3f46\],
+[data-theme="lavender"] .border-\[\#27272a\],
+[data-theme="lavender"] .border-\[\#52525b\],
 [data-theme="lavender"] .border-zinc-800,
-[data-theme="lavender"] .border-zinc-700 {
+[data-theme="lavender"] .border-zinc-800\/60,
+[data-theme="lavender"] .border-zinc-800\/80,
+[data-theme="lavender"] .border-zinc-700,
+[data-theme="lavender"] .border-zinc-700\/60,
+[data-theme="lavender"] .border-zinc-700\/70,
+[data-theme="lavender"] .border-zinc-700\/80,
+[data-theme="lavender"] .border-zinc-700\/90,
+[data-theme="lavender"] .border-zinc-750,
+[data-theme="lavender"] .border-zinc-600 {
   border-color: #b9abc9 !important;
-}
-
-[data-theme="lavender"] .border-\[\#27272a\] {
-  border-color: #cbbddb !important;
 }
 
 [data-theme="lavender"] .text-\[\#f4f4f5\],
@@ -501,20 +616,14 @@ body {
   stroke: #5a357c !important;
 }
 
-[data-theme="lavender"] .hover\:bg-\[\#3f3f46\]:hover,
-[data-theme="lavender"] .hover\:bg-zinc-800:hover,
-[data-theme="lavender"] .hover\:bg-zinc-750:hover,
-[data-theme="lavender"] .hover\:bg-zinc-850:hover {
-  background-color: #cfc4d9 !important;
-}
-
 /* ----------------------------------------------------------------------------
-   4. AREIA & PAPIRO ACONCHEGANTE (SAND) — ZERO BRANCO / BAIXO CONTRASTE / IRLEN
+   4. AREIA & PAPIRO ACONCHEGANTE (SAND)
    ---------------------------------------------------------------------------- */
 [data-theme="sand"] {
   --bg-app: #f0ebdf;
   --bg-card: #e4ddd0;
   --bg-inner: #d7cfbf;
+  --bg-inner-strong: #cbbfab;
   --border-card: #c0b6a2;
   --border-subtle: #d0c7b5;
   --text-primary: #332c22;
@@ -524,30 +633,68 @@ body {
 }
 
 [data-theme="sand"] .app-theme-bg,
-[data-theme="sand"] .bg-\[\#18181b\] {
+[data-theme="sand"] .bg-\[\#18181b\],
+[data-theme="sand"] .bg-\[\#18181b\]\/60,
+[data-theme="sand"] .bg-\[\#18181b\]\/70,
+[data-theme="sand"] .bg-\[\#18181b\]\/80,
+[data-theme="sand"] .bg-\[\#1f1f23\],
+[data-theme="sand"] .bg-\[\#0c0c0e\] {
   background-color: #f0ebdf !important;
   color: #332c22 !important;
 }
 
-[data-theme="sand"] .bg-\[\#27272a\] {
+[data-theme="sand"] .bg-\[\#27272a\],
+[data-theme="sand"] .modal-pastel-card {
   background-color: #e4ddd0 !important;
+  border-color: #c0b6a2 !important;
 }
 
+/* Recipientes internos, poços e botões em areia/papiro pastel quente (zero cinza) */
 [data-theme="sand"] .bg-slate-950,
+[data-theme="sand"] .bg-slate-950\/60,
+[data-theme="sand"] .bg-slate-900,
+[data-theme="sand"] .bg-zinc-950,
 [data-theme="sand"] .bg-zinc-900,
-[data-theme="sand"] .bg-zinc-950 {
+[data-theme="sand"] .bg-zinc-900\/50,
+[data-theme="sand"] .bg-zinc-900\/90,
+[data-theme="sand"] .bg-zinc-850,
+[data-theme="sand"] .bg-zinc-850\/70,
+[data-theme="sand"] .bg-zinc-800,
+[data-theme="sand"] .bg-zinc-800\/80,
+[data-theme="sand"] .bg-zinc-750,
+[data-theme="sand"] .bg-zinc-700 {
   background-color: #d7cfbf !important;
   border-color: #c0b6a2 !important;
+  color: #332c22 !important;
+}
+
+[data-theme="sand"] .hover\:bg-\[\#3f3f46\]:hover,
+[data-theme="sand"] .hover\:bg-\[\#1f1f23\]:hover,
+[data-theme="sand"] .hover\:bg-zinc-800:hover,
+[data-theme="sand"] .hover\:bg-zinc-750:hover,
+[data-theme="sand"] .hover\:bg-zinc-700:hover,
+[data-theme="sand"] .hover\:bg-zinc-850:hover,
+[data-theme="sand"] .hover\:bg-slate-900:hover,
+[data-theme="sand"] .hover\:bg-black:hover {
+  background-color: #cbbfab !important;
+  border-color: #b2a590 !important;
+  color: #1d5236 !important;
 }
 
 [data-theme="sand"] .border-\[\#3f3f46\],
+[data-theme="sand"] .border-\[\#27272a\],
+[data-theme="sand"] .border-\[\#52525b\],
 [data-theme="sand"] .border-zinc-800,
-[data-theme="sand"] .border-zinc-700 {
+[data-theme="sand"] .border-zinc-800\/60,
+[data-theme="sand"] .border-zinc-800\/80,
+[data-theme="sand"] .border-zinc-700,
+[data-theme="sand"] .border-zinc-700\/60,
+[data-theme="sand"] .border-zinc-700\/70,
+[data-theme="sand"] .border-zinc-700\/80,
+[data-theme="sand"] .border-zinc-700\/90,
+[data-theme="sand"] .border-zinc-750,
+[data-theme="sand"] .border-zinc-600 {
   border-color: #c0b6a2 !important;
-}
-
-[data-theme="sand"] .border-\[\#27272a\] {
-  border-color: #d0c7b5 !important;
 }
 
 [data-theme="sand"] .text-\[\#f4f4f5\],
@@ -650,11 +797,35 @@ body {
   stroke: #1d5236 !important;
 }
 
-[data-theme="sand"] .hover\:bg-\[\#3f3f46\]:hover,
-[data-theme="sand"] .hover\:bg-zinc-800:hover,
-[data-theme="sand"] .hover\:bg-zinc-750:hover,
-[data-theme="sand"] .hover\:bg-zinc-850:hover {
-  background-color: #d6cdbc !important;
+/* ----------------------------------------------------------------------------
+   MODO ESCURO SUAVE (DARK) - PARA QUEM PREFERIR RESTAURAR O TEMA NOTURNO
+   ---------------------------------------------------------------------------- */
+[data-theme="dark"] {
+  --bg-app: #18181b;
+  --bg-card: #27272a;
+  --bg-inner: #18181b;
+  --border-card: #3f3f46;
+  --border-subtle: #27272a;
+  --text-primary: #f4f4f5;
+  --text-secondary: #d4d4d8;
+  --text-muted: #a1a1aa;
+  --accent-readable: #2dd4bf;
+}
+
+/* ----------------------------------------------------------------------------
+   REGRAS ESPECÍFICAS PARA SLIDERS E INPUTS EM TONS PASTÉIS
+   ---------------------------------------------------------------------------- */
+[data-theme="sage"] input[type="range"] {
+  accent-color: #174d34;
+}
+[data-theme="sky"] input[type="range"] {
+  accent-color: #165038;
+}
+[data-theme="lavender"] input[type="range"] {
+  accent-color: #174f35;
+}
+[data-theme="sand"] input[type="range"] {
+  accent-color: #1d5236;
 }
 
 /* ----------------------------------------------------------------------------
@@ -665,35 +836,39 @@ body {
 [data-theme="sage"] .deposit-bin-btn {
   background-color: #c7ded0 !important;
   border-color: #a3c2af !important;
+  color: #1e3327 !important;
 }
 [data-theme="sage"] .deposit-shape-icon {
   background-color: #c7ded0 !important;
-  border-color: #ffffff !important;
+  border-color: #1e3327 !important;
 }
 
 [data-theme="sky"] .deposit-bin-btn {
   background-color: #c7dbe8 !important;
   border-color: #9cbccc !important;
+  color: #1d3040 !important;
 }
 [data-theme="sky"] .deposit-shape-icon {
   background-color: #c7dbe8 !important;
-  border-color: #ffffff !important;
+  border-color: #1d3040 !important;
 }
 
 [data-theme="lavender"] .deposit-bin-btn {
   background-color: #cec4dc !important;
   border-color: #aea0c4 !important;
+  color: #2b1f38 !important;
 }
 [data-theme="lavender"] .deposit-shape-icon {
   background-color: #cec4dc !important;
-  border-color: #ffffff !important;
+  border-color: #2b1f38 !important;
 }
 
 [data-theme="sand"] .deposit-bin-btn {
   background-color: #cdc3b0 !important;
   border-color: #b2a590 !important;
+  color: #332c22 !important;
 }
 [data-theme="sand"] .deposit-shape-icon {
   background-color: #cdc3b0 !important;
-  border-color: #ffffff !important;
+  border-color: #332c22 !important;
 }

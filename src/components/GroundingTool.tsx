@@ -312,16 +312,16 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
               setViewMode(viewMode === "step" ? "all" : "step");
               vibrate(30);
             }}
-            className="px-3 py-1.5 rounded-md border border-[#3f3f46] bg-[#18181b] hover:bg-zinc-800 text-xs font-semibold text-zinc-300 transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-3 py-1.5 rounded-md border border-[var(--border-card,#aec3b4)] bg-[var(--bg-inner,#cddcd1)] hover:bg-[var(--bg-card,#d9e4dc)] text-xs font-semibold text-[var(--text-primary,#1e3327)] transition-colors flex items-center gap-1.5 cursor-pointer"
             title="Alternar entre modo focado passo a passo ou visão completa"
           >
-            <Layers className="w-3.5 h-3.5 text-[#2dd4bf]" />
+            <Layers className="w-3.5 h-3.5 text-[var(--accent-readable,#174d34)]" />
             <span>{viewMode === "step" ? "Ver Todos os 5" : "Modo Focado"}</span>
           </button>
 
           <button
             onClick={resetAll}
-            className="p-1.5 rounded-md border border-[#3f3f46] bg-[#18181b] hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer"
+            className="p-1.5 rounded-md border border-[var(--border-card,#aec3b4)] bg-[var(--bg-inner,#cddcd1)] hover:bg-[var(--bg-card,#d9e4dc)] text-[var(--text-muted,#3f5c4c)] hover:text-[var(--text-primary,#1e3327)] transition-colors cursor-pointer"
             title="Reiniciar Ancoragem"
             aria-label="Reiniciar ancoragem"
           >
@@ -332,18 +332,18 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
 
       {/* BARRA DE PROGRESSO GERAL DOS 5 SENTIDOS */}
       <div className="py-4 relative z-10">
-        <div className="flex items-center justify-between text-xs text-[#a1a1aa] mb-2 font-medium">
+        <div className="flex items-center justify-between text-xs text-[var(--text-muted,#3f5c4c)] mb-2 font-medium">
           <span className="flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#2dd4bf]" />
+            <Sparkles className="w-3.5 h-3.5 text-[var(--accent-readable,#174d34)]" />
             <span>Ancoragem no Presente: <strong>{totalChecked} de {totalPossible} itens</strong> identificados</span>
           </span>
-          <span className="font-mono text-[#2dd4bf] font-bold">{progressPercent}%</span>
+          <span className="font-mono text-[var(--accent-readable,#174d34)] font-bold">{progressPercent}%</span>
         </div>
         
         {/* Track bar */}
-        <div className="w-full h-2.5 bg-[#18181b] rounded-full border border-zinc-800 overflow-hidden p-0.5 flex">
+        <div className="w-full h-2.5 bg-[var(--bg-inner,#cddcd1)] rounded-full border border-[var(--border-card,#aec3b4)] overflow-hidden p-0.5 flex">
           <div 
-            className="h-full bg-gradient-to-r from-teal-500 via-[#2dd4bf] to-emerald-400 rounded-full transition-all duration-500 ease-out"
+            className="h-full bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 rounded-full transition-all duration-500 ease-out"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -367,8 +367,8 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
                   isCurrent
                     ? `${step.colorScheme.bg} ${step.colorScheme.border} ring-2 ${step.colorScheme.activeRing} shadow-md`
                     : isDone
-                      ? "bg-teal-950/30 border-teal-500/40 text-teal-300"
-                      : "bg-[#18181b] border-zinc-800 hover:border-zinc-700 text-zinc-400"
+                      ? "bg-emerald-500/15 border-emerald-600/30 text-[var(--accent-readable,#174d34)]"
+                      : "bg-[var(--bg-inner,#cddcd1)] border-[var(--border-card,#aec3b4)] hover:border-[var(--accent-readable,#174d34)] text-[var(--text-muted,#3f5c4c)]"
                 }`}
                 title={`Ir para o sentido ${step.sense}: ${step.count} coisas`}
               >
@@ -386,7 +386,9 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
                     <div 
                       key={dotIdx}
                       className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                        stepChecked[dotIdx] ? "bg-[#2dd4bf]" : "bg-zinc-700"
+                        stepChecked[dotIdx] 
+                          ? "bg-[var(--accent-readable,#174d34)]" 
+                          : "border border-[var(--border-card,#aec3b4)] bg-transparent opacity-60"
                       }`}
                     />
                   ))}
@@ -479,19 +481,19 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
                       }}
                       className={`px-3 py-2 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer self-start sm:self-auto ${
                         isSpeaking 
-                          ? "bg-rose-500/20 border-rose-400 text-rose-300 animate-pulse" 
-                          : "bg-[#18181b]/70 border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                          ? "bg-rose-500/20 border-rose-400 text-rose-700 animate-pulse" 
+                          : "bg-[var(--bg-inner,#cddcd1)] border-[var(--border-card,#aec3b4)] text-[var(--text-primary,#1e3327)] hover:bg-[var(--bg-card,#d9e4dc)]"
                       }`}
                       title="Ouvir instrução por áudio suave"
                     >
                       {isSpeaking ? (
                         <>
-                          <VolumeX className="w-4 h-4 text-rose-400" />
+                          <VolumeX className="w-4 h-4 text-rose-600" />
                           <span>Pausar Leitura</span>
                         </>
                       ) : (
                         <>
-                          <Volume2 className="w-4 h-4 text-[#2dd4bf]" />
+                          <Volume2 className="w-4 h-4 text-[var(--accent-readable,#174d34)]" />
                           <span>Ouvir Instrução em Voz</span>
                         </>
                       )}
@@ -500,11 +502,11 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
                 </div>
 
                 {/* Texto de Ação */}
-                <div className="bg-[#18181b]/70 rounded-lg p-4 border border-zinc-800 space-y-2">
-                  <p className="text-sm md:text-base text-zinc-200 font-medium leading-relaxed">
+                <div className="bg-[var(--bg-inner,#cddcd1)] rounded-lg p-4 border border-[var(--border-card,#aec3b4)] space-y-2">
+                  <p className="text-sm md:text-base text-[var(--text-primary,#1e3327)] font-medium leading-relaxed">
                     👉 <strong>Ação:</strong> {currentStepData.actionText}
                   </p>
-                  <p className="text-xs text-zinc-400 italic">
+                  <p className="text-xs text-[var(--text-muted,#3f5c4c)] italic">
                     💡 <em>{currentStepData.tip}</em>
                   </p>
                 </div>
@@ -512,12 +514,12 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
                 {/* Itens Interativos com Exemplos Selecionáveis */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-zinc-300 uppercase tracking-wider">
+                    <span className="text-xs font-bold text-[var(--text-secondary,#2a4234)] uppercase tracking-wider">
                       Toque em cada um conforme você for identificando no ambiente:
                     </span>
                     <button
                       onClick={() => checkAllForStep(currentStep)}
-                      className="text-[11px] text-[#2dd4bf] hover:underline font-semibold cursor-pointer"
+                      className="text-[11px] text-[var(--accent-readable,#174d34)] hover:underline font-semibold cursor-pointer"
                     >
                       Marcar todos os {currentStepData.count}
                     </button>
@@ -534,25 +536,25 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
                           onClick={() => toggleItem(currentStep, itemIdx)}
                           className={`flex items-center gap-3 p-3.5 rounded-lg border text-left transition-all cursor-pointer select-none group ${
                             isChecked
-                              ? "bg-teal-950/40 border-teal-400 text-teal-200 shadow-sm"
-                              : "bg-[#18181b] border-zinc-800 hover:border-zinc-700 text-zinc-300"
+                              ? "bg-[var(--bg-card,#d9e4dc)] border-[var(--accent-readable,#174d34)] text-[var(--text-primary,#1e3327)] shadow-sm"
+                              : "bg-[var(--bg-app,#e8eee9)] border-[var(--border-card,#aec3b4)] hover:border-[var(--accent-readable,#174d34)] text-[var(--text-primary,#1e3327)]"
                           }`}
                         >
                           <div 
                             className={`w-6 h-6 rounded-md border flex items-center justify-center shrink-0 transition-colors ${
                               isChecked
-                                ? "bg-[#2dd4bf] border-[#2dd4bf] text-zinc-950 font-bold"
-                                : "border-zinc-600 bg-zinc-900 group-hover:border-zinc-500"
+                                ? "bg-[var(--accent-readable,#174d34)] border-[var(--accent-readable,#174d34)] text-white font-bold"
+                                : "border-[var(--border-card,#aec3b4)] bg-[var(--bg-inner,#cddcd1)]"
                             }`}
                           >
-                            {isChecked ? <Check className="w-4 h-4 stroke-[3]" /> : <span className="text-xs font-mono text-zinc-400">{itemIdx + 1}</span>}
+                            {isChecked ? <Check className="w-4 h-4 stroke-[3]" /> : <span className="text-xs font-mono text-[var(--text-muted,#3f5c4c)]">{itemIdx + 1}</span>}
                           </div>
 
                           <div className="flex-1 min-w-0">
                             <div className="text-xs font-semibold leading-snug">
                               {exampleText}
                             </div>
-                            <span className="text-[10px] text-zinc-500">
+                            <span className="text-[10px] text-[var(--text-muted,#3f5c4c)]">
                               {isChecked ? "✓ Identificado no ambiente" : "Toque ao encontrar"}
                             </span>
                           </div>
@@ -563,7 +565,7 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
                 </div>
 
                 {/* BOTÕES DE NAVEGAÇÃO ENTRE OS PASSOS */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-zinc-800/80">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-[var(--border-card,#aec3b4)]">
                   <button
                     onClick={() => {
                       if (currentStep > 0) {
@@ -572,13 +574,13 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
                       }
                     }}
                     disabled={currentStep === 0}
-                    className="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-zinc-700 bg-zinc-800 hover:bg-zinc-750 text-xs font-bold text-zinc-300 disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-[var(--border-card,#aec3b4)] bg-[var(--bg-inner,#cddcd1)] hover:bg-[var(--bg-card,#d9e4dc)] text-xs font-bold text-[var(--text-primary,#1e3327)] disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Sentido Anterior
                   </button>
 
-                  <div className="text-xs text-zinc-400 font-mono text-center">
+                  <div className="text-xs text-[var(--text-muted,#3f5c4c)] font-mono text-center">
                     {currentStepChecked.filter(Boolean).length} de {currentStepData.count} concluídos
                   </div>
 
@@ -594,8 +596,8 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
                     }}
                     className={`w-full sm:w-auto px-5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
                       currentStepDone
-                        ? "bg-[#2dd4bf] hover:bg-teal-400 text-zinc-950 shadow-lg shadow-teal-950/40 ring-2 ring-teal-300"
-                        : "bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-600"
+                        ? "bg-[var(--accent-readable,#174d34)] hover:opacity-90 text-white shadow-lg"
+                        : "bg-[var(--bg-inner,#cddcd1)] hover:bg-[var(--bg-card,#d9e4dc)] text-[var(--text-primary,#1e3327)] border border-[var(--border-card,#aec3b4)]"
                     }`}
                   >
                     <span>{currentStep === 4 ? "Concluir Ancoragem" : "Próximo Sentido"}</span>
@@ -615,14 +617,14 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
           ========================================================================= */}
       {viewMode === "all" && (
         <div className="mt-6 space-y-4 relative z-10">
-          <div className="flex items-center justify-between bg-[#18181b] p-3 rounded-lg border border-zinc-800 text-xs text-zinc-400">
+          <div className="flex items-center justify-between bg-[var(--bg-inner,#cddcd1)] p-3 rounded-lg border border-[var(--border-card,#aec3b4)] text-xs text-[var(--text-secondary,#2a4234)]">
             <span>Visão completa dos 5 sentidos do Grounding. Você pode interagir com qualquer passo:</span>
             <button
               onClick={() => {
                 setViewMode("step");
                 vibrate(30);
               }}
-              className="text-[#2dd4bf] font-bold hover:underline cursor-pointer"
+              className="text-[var(--accent-readable,#174d34)] font-bold hover:underline cursor-pointer"
             >
               Voltar ao Modo Focado
             </button>
@@ -668,15 +670,15 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
                           onClick={() => toggleItem(stepIdx, itemIdx)}
                           className={`w-full flex items-center gap-2 p-2 rounded text-left text-xs transition-all cursor-pointer ${
                             isChecked
-                              ? "bg-teal-950/50 text-teal-200 border border-teal-500/40"
-                              : "bg-[#18181b]/80 hover:bg-zinc-800 text-zinc-300 border border-zinc-800"
+                              ? "bg-[var(--bg-card,#d9e4dc)] text-[var(--text-primary,#1e3327)] border border-[var(--accent-readable,#174d34)]"
+                              : "bg-[var(--bg-app,#e8eee9)] hover:bg-[var(--bg-inner,#cddcd1)] text-[var(--text-primary,#1e3327)] border border-[var(--border-card,#aec3b4)]"
                           }`}
                         >
                           <div 
                             className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 text-[10px] ${
                               isChecked
-                                ? "bg-[#2dd4bf] border-[#2dd4bf] text-zinc-950 font-bold"
-                                : "border-zinc-600 bg-zinc-900"
+                                ? "bg-[var(--accent-readable,#174d34)] border-[var(--accent-readable,#174d34)] text-white font-bold"
+                                : "border-[var(--border-card,#aec3b4)] bg-[var(--bg-inner,#cddcd1)]"
                             }`}
                           >
                             {isChecked ? <Check className="w-3 h-3 stroke-[3]" /> : itemIdx + 1}
@@ -693,7 +695,7 @@ export default function GroundingTool({ onNavigateToTool, triggerVibrate }: Grou
                       setViewMode("step");
                       vibrate(40);
                     }}
-                    className="w-full py-2 bg-[#18181b] hover:bg-zinc-800 text-zinc-300 border border-zinc-700 rounded-md font-semibold text-xs transition-colors cursor-pointer text-center"
+                    className="w-full py-2 bg-[var(--bg-inner,#cddcd1)] hover:bg-[var(--bg-card,#d9e4dc)] text-[var(--text-primary,#1e3327)] border border-[var(--border-card,#aec3b4)] rounded-md font-semibold text-xs transition-colors cursor-pointer text-center"
                   >
                     Focar Neste Sentido
                   </button>

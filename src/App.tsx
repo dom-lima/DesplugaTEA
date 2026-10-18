@@ -337,13 +337,13 @@ export default function App() {
   const noiseNodeRef = useRef<AudioBufferSourceNode | null>(null);
   const filterNodeRef = useRef<BiquadFilterNode | null>(null);
 
-  // Tema Visual Neurodivergente (Modo Escuro Suave e Paletas Pastéis de Alta Legibilidade)
+  // Tema Visual Neurodivergente (Paletas Pastéis de Alta Legibilidade por Padrão)
   const [currentTheme, setCurrentTheme] = useState<ThemeId>(() => {
     const saved = safeStorage.getItem("desplugatea_theme");
-    if (saved && ["dark", "sage", "sky", "lavender", "sand"].includes(saved)) {
+    if (saved && ["sage", "sky", "lavender", "sand", "dark"].includes(saved)) {
       return saved as ThemeId;
     }
-    return "dark";
+    return "sage";
   });
   const [showPaletteModal, setShowPaletteModal] = useState<boolean>(false);
 
@@ -862,11 +862,11 @@ export default function App() {
                 className="bg-transparent text-[#f4f4f5] font-bold text-xs outline-none cursor-pointer"
                 aria-label="Selecionar tema de cores pastéis para fácil leitura"
               >
-                <option value="dark" className="bg-zinc-900 text-zinc-100">🌙 Escuro Suave</option>
-                <option value="sage" className="bg-zinc-900 text-zinc-100">🌿 Sálvia & Menta (Pastel)</option>
-                <option value="sky" className="bg-zinc-900 text-zinc-100">☁️ Céu Empoeirado (Pastel)</option>
-                <option value="lavender" className="bg-zinc-900 text-zinc-100">🌸 Lavanda Serena (Pastel)</option>
-                <option value="sand" className="bg-zinc-900 text-zinc-100">🌾 Areia & Aveia (Pastel)</option>
+                <option value="sage" className="bg-[#e8eee9] text-[#1e3327]">🌿 Sálvia & Menta (Pastel)</option>
+                <option value="sky" className="bg-[#e7edf2] text-[#1d3040]">☁️ Céu Empoeirado (Pastel)</option>
+                <option value="lavender" className="bg-[#ece7f2] text-[#2b1f38]">🌸 Lavanda Serena (Pastel)</option>
+                <option value="sand" className="bg-[#f0ebdf] text-[#332c22]">🌾 Areia & Papiro (Pastel)</option>
+                <option value="dark" className="bg-[#18181b] text-[#f4f4f5]">🌙 Modo Escuro Alternativo</option>
               </select>
             </div>
 
