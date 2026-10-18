@@ -101,10 +101,25 @@ Evita o contraste excessivo (que causa fotofobia e estresse visual) e o contrast
    npm run build
    ```
 
-5. **Executar em modo produção:**
+5. **Executar em modo produção local:**
    ```bash
    npm start
    ```
+
+---
+
+## 🚀 Publicação no Netlify / Vercel
+
+O projeto já vem 100% configurado com `netlify.toml` e `public/_redirects` para deploy imediato sem tela branca:
+
+### Publicar no Netlify via GitHub:
+1. Conecte o repositório no [Netlify](https://app.netlify.com/).
+2. O Netlify detectará automaticamente o arquivo `netlify.toml`:
+   * **Build command:** `npm run build`
+   * **Publish directory:** `dist`
+3. Clique em **Deploy site**.
+
+> 💡 **Evitando tela branca no Netlify manual (Drag & Drop):** Se for usar a opção de arrastar pastas (*Manual deploy*), **NUNCA** arraste a raiz do projeto. Execute primeiro `npm run build` na sua máquina e arraste **apenas a pasta `dist`** gerada.
 
 ---
 

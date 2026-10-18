@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import GroundingTool from "./components/GroundingTool";
 import PastelPaletteModal, { ThemeId } from "./components/PastelPaletteModal";
+import { safeStorage } from "./utils/storage";
 
 // ============================================================================
 // BANCO DE DADOS DE CONSELHOS LOCAIS (10 por categoria)
@@ -317,7 +318,7 @@ export default function App() {
 
   // Módulo 2.7: Bateria Corporal
   const [batteryLevel, setBatteryLevel] = useState<number>(() => {
-    const saved = localStorage.getItem("desplugatea_battery");
+    const saved = safeStorage.getItem("desplugatea_battery");
     return saved ? parseInt(saved, 10) : 50;
   });
 
@@ -338,11 +339,9 @@ export default function App() {
 
   // Tema Visual Neurodivergente (Modo Escuro Suave e Paletas Pastéis de Alta Legibilidade)
   const [currentTheme, setCurrentTheme] = useState<ThemeId>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("desplugatea_theme");
-      if (saved && ["dark", "sage", "sky", "lavender", "sand"].includes(saved)) {
-        return saved as ThemeId;
-      }
+    const saved = safeStorage.getItem("desplugatea_theme");
+    if (saved && ["dark", "sage", "sky", "lavender", "sand"].includes(saved)) {
+      return saved as ThemeId;
     }
     return "dark";
   });
@@ -352,7 +351,7 @@ export default function App() {
   useEffect(() => {
     if (typeof document !== "undefined") {
       document.documentElement.setAttribute("data-theme", currentTheme);
-      localStorage.setItem("desplugatea_theme", currentTheme);
+      safeStorage.setItem("desplugatea_theme", currentTheme);
     }
   }, [currentTheme]);
 
@@ -444,7 +443,7 @@ export default function App() {
   // Salvar bateria corporal localmente
   const handleBatteryChange = (val: number) => {
     setBatteryLevel(val);
-    localStorage.setItem("desplugatea_battery", val.toString());
+    safeStorage.setItem("desplugatea_battery", val.toString());
   };
 
   // Limpeza de áudio ao desmontar e desbloqueio preventivo de áudio para dispositivos móveis (iOS/Safari)
