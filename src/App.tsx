@@ -20,11 +20,11 @@ import {
   Gamepad2,
   BookOpen,
   Clock,
-  Anchor,
   Palette
 } from "lucide-react";
 import GroundingTool from "./components/GroundingTool";
 import PastelPaletteModal, { ThemeId } from "./components/PastelPaletteModal";
+import BubblePopper from "./components/BubblePopper";
 import { safeStorage } from "./utils/storage";
 
 // ============================================================================
@@ -300,9 +300,6 @@ export default function App() {
   // Módulo 1.2: Respiração Guiada (4-4-4: Inspire, Segure, Expire)
   const [breathingActive, setBreathingActive] = useState<boolean>(false);
   const [breathingCounter, setBreathingCounter] = useState<number>(0); // 0 a 11 (12 segundos totais)
-  
-  // Módulo 1.3: Fidget Digital (Pop-it)
-  const [popitState, setPopitState] = useState<boolean[]>(Array(16).fill(false));
 
   // Módulo 1.4: Cartão de Emergência
   const [showEmergencyCard, setShowEmergencyCard] = useState<boolean>(false);
@@ -691,22 +688,6 @@ export default function App() {
     }
   };
 
-  // Resetar o Pop-it
-  const handlePopitClick = (idx: number) => {
-    setPopitState(prev => {
-      const copy = [...prev];
-      copy[idx] = !copy[idx];
-      return copy;
-    });
-    triggerVibrate(40);
-  };
-
-  // Reset do Pop-it inteiro
-  const resetPopit = () => {
-    setPopitState(Array(16).fill(false));
-    triggerVibrate(150);
-  };
-
   // Modo Pânico Sensorial
   const handleEnterPanicMode = () => {
     stopSynthesizedSound();
@@ -788,39 +769,24 @@ export default function App() {
         </div>
       )}
 
-      {/* BOTÃO FLUTUANTE DE EMERGÊNCIA (MÓDULO 1.4, 1.1, ANCORAGEM 5-4-3-2-1 & CORES PASTÉIS) */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
-        <button
-          onClick={() => setShowPaletteModal(true)}
-          className="bg-indigo-700 hover:bg-indigo-600 text-white font-bold px-3.5 py-2 rounded-lg shadow-xl border border-indigo-400/30 flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 text-xs uppercase tracking-wider"
-          title="Abrir sugestões de cores pastéis neurodivergentes"
-        >
-          <Palette className="w-4 h-4" />
-          Cores Pastéis
-        </button>
-        <button
-          onClick={() => handleNavigateToTool("grounding-tool")}
-          className="bg-teal-700 hover:bg-teal-600 text-white font-bold px-3.5 py-2 rounded-lg shadow-xl border border-teal-400/30 flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 text-xs uppercase tracking-wider"
-          title="Ir para a Técnica de Ancoragem 5-4-3-2-1"
-        >
-          <Anchor className="w-4 h-4" />
-          Ancoragem 5-4-3-2-1
-        </button>
+      {/* BOTÕES FLUTUANTES DE EMERGÊNCIA (CARTÃO DE AJUDA & PÂNICO SENSORIAL) 
+          Posicionados elevados (bottom-24) para evitar sobreposição com o cartão nativo do Netlify */}
+      <div className="fixed bottom-24 right-4 sm:right-6 z-50 flex flex-col gap-2.5">
         <button
           onClick={() => setShowEmergencyCard(true)}
-          className="bg-rose-600 hover:bg-rose-500 text-white font-bold px-3.5 py-2 rounded-lg shadow-xl border border-rose-400/30 flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 text-xs uppercase tracking-wider"
+          className="bg-rose-600 hover:bg-rose-500 text-white font-bold px-3.5 py-2.5 rounded-lg shadow-2xl border border-rose-400/30 flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 text-xs uppercase tracking-wider"
           title="Abrir cartão de ajuda rápida para as pessoas ao redor"
         >
-          <AlertOctagon className="w-4 h-4" />
-          Cartão de Ajuda
+          <AlertOctagon className="w-4 h-4 shrink-0" />
+          <span>Cartão de Ajuda</span>
         </button>
         <button
           onClick={handleEnterPanicMode}
-          className="bg-zinc-950 hover:bg-black text-zinc-300 font-bold px-3.5 py-2 rounded-lg shadow-xl border border-[#3f3f46] flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 text-xs uppercase tracking-wider"
+          className="bg-zinc-950 hover:bg-black text-zinc-200 font-bold px-3.5 py-2.5 rounded-lg shadow-2xl border border-[#3f3f46] flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 text-xs uppercase tracking-wider"
           title="Isolar tudo instantaneamente na tela"
         >
-          <EyeOff className="w-4 h-4" />
-          Pânico Sensorial
+          <EyeOff className="w-4 h-4 shrink-0" />
+          <span>Pânico Sensorial</span>
         </button>
       </div>
 
@@ -878,16 +844,6 @@ export default function App() {
             >
               <Palette className="w-3.5 h-3.5 text-indigo-300" />
               <span>Cores Pastéis</span>
-            </button>
-
-            {/* Botão de Atalho para Ancoragem */}
-            <button
-              onClick={() => handleNavigateToTool("grounding-tool")}
-              className="flex items-center gap-1.5 px-3 py-2 bg-teal-500/10 hover:bg-teal-500/20 rounded-md border border-teal-400/30 text-xs text-teal-300 font-bold transition-all cursor-pointer"
-              title="Acessar Técnica de Ancoragem 5-4-3-2-1"
-            >
-              <Anchor className="w-3.5 h-3.5 text-[#2dd4bf]" />
-              <span>Ancoragem 5-4-3-2-1</span>
             </button>
           </div>
         </header>
@@ -1149,41 +1105,8 @@ export default function App() {
               </button>
             </div>
 
-            {/* 2. Fidget Digital Pop-it (4x4 Grid de estímulo repetitivo) */}
-            <div id="popit-tool" className="bg-[#27272a] border border-[#3f3f46] rounded-xl p-5 flex flex-col justify-between min-h-[300px] transition-all duration-500">
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2 text-[#2dd4bf]">
-                  <Gamepad2 className="w-5 h-5" />
-                  <h3 className="font-bold text-base text-[#f4f4f5]">Pop-it Virtual</h3>
-                </div>
-                <p className="text-xs text-[#a1a1aa] leading-relaxed">
-                  Estoure as bolhas de forma repetitiva e livre para acalmar as mãos e canalizar o estresse motor.
-                </p>
-              </div>
-
-              {/* Painel do Pop-it */}
-              <div className="grid grid-cols-4 gap-2 my-4 bg-slate-950 p-3 rounded-lg border border-[#3f3f46] max-w-[180px] mx-auto">
-                {popitState.map((popped, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handlePopitClick(idx)}
-                    className={`w-8 h-8 rounded-full transition-all duration-300 border focus:outline-none cursor-pointer ${
-                      popped
-                        ? "bg-[#134e4a] border-emerald-400 scale-90 shadow-inner"
-                        : "bg-[#2dd4bf]/20 border-[#2dd4bf]/50 hover:bg-[#2dd4bf]/30"
-                    }`}
-                    aria-label={`Bolha pop-it ${idx + 1}`}
-                  />
-                ))}
-              </div>
-
-              <button
-                onClick={resetPopit}
-                className="w-full py-2.5 bg-zinc-800 hover:bg-zinc-750 text-zinc-300 border border-zinc-700 rounded-md font-bold text-xs tracking-wider uppercase cursor-pointer transition-all"
-              >
-                Restaurar Bolhas
-              </button>
-            </div>
+            {/* 2. Fidget Digital Estoura Bolhas & Pop-it (Interativo com Linha Partida) */}
+            <BubblePopper onVibrate={triggerVibrate} />
 
             {/* 3. Gerador de Ruído Marrom Nofail (Web Audio API) */}
             <div id="sound-tool" className="bg-[#27272a] border border-[#3f3f46] rounded-xl p-5 flex flex-col justify-between min-h-[300px] transition-all duration-500">
