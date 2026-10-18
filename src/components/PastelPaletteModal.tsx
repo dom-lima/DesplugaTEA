@@ -39,7 +39,7 @@ export interface PaletteInfo {
 export const PASTEL_PALETTES: PaletteInfo[] = [
   {
     id: "sage",
-    name: "Sálvia Veludo & Menta Serena",
+    name: "Sálvia Veludo e Menta Serena",
     tagline: "Equilíbrio parassimpático, zero ofuscamento e contraste suave",
     badge: "Recomendação Nº 1 para TEA",
     recommendedFor: "Pessoas no espectro autista com hipersensibilidade sensorial, fotofobia e ansiedade",
@@ -62,9 +62,9 @@ export const PASTEL_PALETTES: PaletteInfo[] = [
   },
   {
     id: "sky",
-    name: "Céu Suave & Névoa",
+    name: "Céu Suave e Névoa",
     tagline: "Clareza mental, redução de estímulos invasivos e foco sereno",
-    badge: "Excelente para TDAH & Fotofobia",
+    badge: "Excelente para TDAH e Fotofobia",
     recommendedFor: "Pessoas com pensamentos acelerados, névoa mental e sensibilidade à luz branca",
     colors: {
       bgApp: { name: "Fundo Geral", hex: "#E7EDF2", label: "Céu Suave Pastel" },
@@ -72,7 +72,7 @@ export const PASTEL_PALETTES: PaletteInfo[] = [
       borders: { name: "Bordas Estruturantes", hex: "#ABC0D0", label: "Azul Suave Estrutural" },
       textPrimary: { name: "Texto Principal", hex: "#1D3040", label: "Marinho Profundo (7.8:1)" },
       textSecondary: { name: "Texto Secundário", hex: "#3D5469", label: "Azul Petróleo Médio" },
-      accent: { name: "Acentos e Leitura", hex: "#165038", label: "Verde Mineral & Marinho Legível" }
+      accent: { name: "Acentos e Leitura", hex: "#165038", label: "Verde Mineral e Marinho Legível" }
     },
     contrastRatio: "7.1:1 a 7.8:1 — Nitidez com Calma",
     wcagLevel: "WCAG AAA",
@@ -85,9 +85,9 @@ export const PASTEL_PALETTES: PaletteInfo[] = [
   },
   {
     id: "lavender",
-    name: "Lavanda Veludo & Ametista",
+    name: "Lavanda Veludo e Ametista",
     tagline: "Desaceleração de pensamentos e acolhimento emocional",
-    badge: "Acolhimento & Anti-Pânico",
+    badge: "Acolhimento e Anti-Pânico",
     recommendedFor: "Crises de ansiedade, ruminações mentais e pânico sensorial",
     colors: {
       bgApp: { name: "Fundo Geral", hex: "#ECE7F2", label: "Bruma de Lavanda Pastel" },
@@ -108,12 +108,12 @@ export const PASTEL_PALETTES: PaletteInfo[] = [
   },
   {
     id: "sand",
-    name: "Areia & Papiro Aconchegante",
+    name: "Areia e Papiro Aconchegante",
     tagline: "Filtro total de luz azul, conforto orgânico e baixo contraste (Irlen)",
     badge: "Anti-Estresse Escotópico (Irlen)",
     recommendedFor: "Pessoas com sensibilidade ao brilho, enxaqueca e aversão a alto contraste",
     colors: {
-      bgApp: { name: "Fundo Geral", hex: "#F0EBDF", label: "Areia & Papiro Pastel Quente" },
+      bgApp: { name: "Fundo Geral", hex: "#F0EBDF", label: "Areia e Papiro Pastel Quente" },
       cardBg: { name: "Superfície dos Cartões", hex: "#E4DDD0", label: "Linho Cru Macio (Zero Branco)" },
       borders: { name: "Bordas Estruturantes", hex: "#C0B6A2", label: "Areia Mineral Suave" },
       textPrimary: { name: "Texto Principal", hex: "#332C22", label: "Café Mineral Aveludado (7.2:1)" },
@@ -450,7 +450,7 @@ export default function PastelPaletteModal({
               </div>
             </div>
 
-            {/* JUSTIFICATIVA NEUROLÓGICA & BENEFÍCIOS CLÍNICOS */}
+            {/* JUSTIFICATIVA NEUROLÓGICA E BENEFÍCIOS CLÍNICOS */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div className="bg-[var(--bg-inner,#cddcd1)] border border-[var(--border-card,#aec3b4)] p-4 rounded-xl space-y-2">
                 <div className="flex items-center gap-2 text-[var(--accent-readable,#174d34)] font-bold text-xs uppercase tracking-wider">

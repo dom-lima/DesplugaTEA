@@ -44,7 +44,7 @@ body {
    ============================================================================ */
 
 /* ----------------------------------------------------------------------------
-   1. SÁLVIA VELUDO & MENTA SERENA (SAGE) — TEMA PADRÃO
+   1. SÁLVIA VELUDO E MENTA SERENA (SAGE) — TEMA PADRÃO
    ---------------------------------------------------------------------------- */
 [data-theme="sage"] {
   --bg-app: #e8eee9;
@@ -253,7 +253,7 @@ body {
 }
 
 /* ----------------------------------------------------------------------------
-   2. CÉU SUAVE & NÉVOA (SKY)
+   2. CÉU SUAVE E NÉVOA (SKY)
    ---------------------------------------------------------------------------- */
 [data-theme="sky"] {
   --bg-app: #e7edf2;
@@ -436,7 +436,7 @@ body {
 }
 
 /* ----------------------------------------------------------------------------
-   3. LAVANDA VELUDO & AMETISTA (LAVENDER)
+   3. LAVANDA VELUDO E AMETISTA (LAVENDER)
    ---------------------------------------------------------------------------- */
 [data-theme="lavender"] {
   --bg-app: #ece7f2;
@@ -617,7 +617,7 @@ body {
 }
 
 /* ----------------------------------------------------------------------------
-   4. AREIA & PAPIRO ACONCHEGANTE (SAND)
+   4. AREIA E PAPIRO ACONCHEGANTE (SAND)
    ---------------------------------------------------------------------------- */
 [data-theme="sand"] {
   --bg-app: #f0ebdf;
@@ -915,87 +915,157 @@ body {
 }
 
 /* ----------------------------------------------------------------------------
-   CAIXINHAS DO SEQUENCIADOR RÍTMICO — CONTRASTE SUAVE E AMENO EM TODOS OS MODOS
-   Elimina tons agressivos e ofuscamento: as caixas absorvem a superfície pastel natural
-   do tema com bordas delicadas e tipografia em contraste moderado e repousante.
+   CAIXINHAS DO SEQUENCIADOR RÍTMICO — CONTRASTE SUAVE E BAIXO EM TODOS OS MODOS
+   Reduz o contraste de tom das caixas em relação ao fundo em todos os temas.
+   As caixas acolhem a tonalidade da superfície com transição quase nula de brilho,
+   bordas pastel amenas de 1px e tipografia suave sem agressividade visual.
    ---------------------------------------------------------------------------- */
 .motor-pad-box {
-  background-color: var(--bg-inner, #cddcd1) !important;
-  border-color: var(--border-card, #aec3b4) !important;
-  color: var(--text-primary, #1e3327) !important;
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  border-color: var(--border-subtle, #bdd1c3) !important;
+  border-width: 1px !important;
+  color: var(--text-secondary, #2a4234) !important;
+  box-shadow: none !important;
 }
 
 .motor-pad-box:hover {
-  background-color: var(--bg-inner-strong, #c2d6c7) !important;
-  border-color: var(--border-subtle, #bdd1c3) !important;
+  background-color: rgba(255, 255, 255, 0.35) !important;
+  border-color: var(--border-card, #aec3b4) !important;
 }
 
 .motor-pad-box.pad-expected {
-  background-color: var(--bg-inner-strong, #c2d6c7) !important;
-  border-color: var(--accent-readable, #174d34) !important;
-  border-width: 2px !important;
+  background-color: var(--bg-inner, #cddcd1) !important;
+  border-color: var(--border-card, #aec3b4) !important;
+  border-width: 1.5px !important;
+  color: var(--text-secondary, #2a4234) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
 }
 
 .motor-pad-box.pad-active {
   background-color: var(--bg-inner-strong, #c2d6c7) !important;
-  border-color: var(--text-muted, #3f5c4c) !important;
+  border-color: var(--border-card, #aec3b4) !important;
   transform: scale(0.98);
 }
 
-/* MODO ESCURO: Caixinhas com contraste moderado e calmo, sem brilho agressivo */
+/* SÁLVIA E MENTA: Tons pastéis que se fundem ao cartão com contraste repousante */
+[data-theme="sage"] .motor-pad-box {
+  background-color: #d6e2d9 !important;
+  border-color: #c1d3c6 !important;
+  color: #2e4738 !important;
+}
+[data-theme="sage"] .motor-pad-box:hover {
+  background-color: #d0ded4 !important;
+  border-color: #b5cbbb !important;
+}
+[data-theme="sage"] .motor-pad-box.pad-expected {
+  background-color: #cce0d3 !important;
+  border-color: #9cbca7 !important;
+  color: #273e31 !important;
+}
+
+/* CÉU SUAVE: Fundo suave e bordas de névoa amenas */
+[data-theme="sky"] .motor-pad-box {
+  background-color: #d6e1e9 !important;
+  border-color: #bfd0dc !important;
+  color: #2b4252 !important;
+}
+[data-theme="sky"] .motor-pad-box:hover {
+  background-color: #d0dde6 !important;
+  border-color: #b3c7d5 !important;
+}
+[data-theme="sky"] .motor-pad-box.pad-expected {
+  background-color: #cddbe5 !important;
+  border-color: #9eb8ca !important;
+  color: #253947 !important;
+}
+
+/* LAVANDA: Fundo aveludado e borda macia sem corte visual */
+[data-theme="lavender"] .motor-pad-box {
+  background-color: #dbd3e3 !important;
+  border-color: #c6bcd0 !important;
+  color: #433350 !important;
+}
+[data-theme="lavender"] .motor-pad-box:hover {
+  background-color: #d4c9dd !important;
+  border-color: #baaebd !important;
+}
+[data-theme="lavender"] .motor-pad-box.pad-expected {
+  background-color: #d1c5db !important;
+  border-color: #aa9bbe !important;
+  color: #3b2c47 !important;
+}
+
+/* AREIA E PAPIRO: Tons aconchegantes com quase zero contraste de borda */
+[data-theme="sand"] .motor-pad-box {
+  background-color: #e0d8cb !important;
+  border-color: #cbc0b0 !important;
+  color: #4b4034 !important;
+}
+[data-theme="sand"] .motor-pad-box:hover {
+  background-color: #dad0c2 !important;
+  border-color: #c0b3a1 !important;
+}
+[data-theme="sand"] .motor-pad-box.pad-expected {
+  background-color: #d7cdbe !important;
+  border-color: #b2a593 !important;
+  color: #43382c !important;
+}
+
+/* MODO ESCURO: Caixinhas com contraste mínimo contra o fundo #27272a */
 [data-theme="dark"] .motor-pad-box {
-  background-color: #202024 !important;
-  border-color: #38383f !important;
-  color: #d4d4d8 !important;
+  background-color: #242427 !important;
+  border-color: #313137 !important;
+  color: #a1a1aa !important;
 }
 
 [data-theme="dark"] .motor-pad-box:hover {
-  background-color: #27272c !important;
-  border-color: #484852 !important;
+  background-color: #27272b !important;
+  border-color: #3c3c44 !important;
 }
 
 [data-theme="dark"] .motor-pad-box.pad-expected {
-  background-color: #26262b !important;
-  border-color: #5a7063 !important; /* Tom sálvia ameno e sem neon */
-  border-width: 2px !important;
+  background-color: #28282e !important;
+  border-color: #4a4a54 !important;
+  border-width: 1.5px !important;
+  color: #b4b4bc !important;
 }
 
 [data-theme="dark"] .motor-pad-box.pad-active {
-  background-color: #2b2b31 !important;
-  border-color: #63776c !important;
+  background-color: #2c2c33 !important;
+  border-color: #52525c !important;
 }
 
-/* Indicadores de cor pontuais e sutis (desaturados e de baixo contraste) */
+/* Indicadores de cor pontuais com opacidade reduzida para zero ofuscamento */
 .pad-accent-mint {
   background-color: #2d8a5e;
-  opacity: 0.55;
+  opacity: 0.45;
 }
 .pad-accent-sky {
   background-color: #3878a8;
-  opacity: 0.55;
+  opacity: 0.45;
 }
 .pad-accent-lavender {
   background-color: #7b589c;
-  opacity: 0.55;
+  opacity: 0.45;
 }
 .pad-accent-amber {
   background-color: #a87328;
-  opacity: 0.55;
+  opacity: 0.45;
 }
 
 [data-theme="dark"] .pad-accent-mint {
   background-color: #558b71;
-  opacity: 0.65;
+  opacity: 0.50;
 }
 [data-theme="dark"] .pad-accent-sky {
   background-color: #557d9b;
-  opacity: 0.65;
+  opacity: 0.50;
 }
 [data-theme="dark"] .pad-accent-lavender {
   background-color: #7d6b91;
-  opacity: 0.65;
+  opacity: 0.50;
 }
 [data-theme="dark"] .pad-accent-amber {
   background-color: #967848;
-  opacity: 0.65;
+  opacity: 0.50;
 }

@@ -24,10 +24,11 @@ import PastelPaletteModal, { ThemeId } from "./components/PastelPaletteModal";
 import BubblePopper from "./components/BubblePopper";
 import MotorPredictabilityTool from "./components/MotorPredictabilityTool";
 import { safeStorage } from "./utils/storage";
+import { unlockMobileAudio } from "./utils/audioSystem";
 
 // ============================================================================
-// BANCO DE DADOS DE CONSELHOS LOCAIS (10 por categoria)
-// Todos incluem tom descontraído e a recomendação de buscar psicólogo e psiquiatra.
+// BANCO DE DADOS DE DICAS LOCAIS DE DESCOMPRESSÃO (10 por categoria)
+// Todas incluem tom acolhedor e sugestão de acompanhamento profissional.
 // ============================================================================
 const ADVICE_DATABASE: Record<string, string[]> = {
   som_alto: [
@@ -82,9 +83,9 @@ const ADVICE_DATABASE: Record<string, string[]> = {
 
 // NOTA: As Histórias Sociais foram integralmente preservadas e salvas em
 // src/backup/socialStoriesBackup.ts e src/backup/SocialStoriesComponent.tsx
-// para conformidade com conselhos regulatórios e futura reinstalação se desejado.
+// para arquivo de segurança e futura reinstalação se desejado.
 
-// Função utilitária para mapear dinamicamente as ferramentas recomendadas baseadas no texto do conselho
+// Função utilitária para mapear dinamicamente as ferramentas recomendadas baseadas no texto da dica
 const getRecommendationsForAdvice = (text: string, triggerId: string): string[] => {
   const list: string[] = [];
   const lowerText = text.toLowerCase();
@@ -151,7 +152,7 @@ const getRecommendationsForAdvice = (text: string, triggerId: string): string[] 
     list.push("shapes");
   }
 
-  // Previsibilidade Motora & Ritmo
+  // Previsibilidade Motora e Ritmo
   if (
     lowerText.includes("previsibilidade") || 
     lowerText.includes("ritmo") || 
@@ -205,7 +206,7 @@ export default function App() {
   // Módulo 1.4: Cartão de Emergência
   const [showEmergencyCard, setShowEmergencyCard] = useState<boolean>(false);
 
-  // Módulo 1.5 & 2.8: Geradores de Áudio (Brown Noise e Chuva via Web Audio API)
+  // Módulo 1.5 e 2.8: Geradores de Áudio (Brown Noise e Chuva via Web Audio API)
   const [soundPlaying, setSoundPlaying] = useState<boolean>(false);
   const [activeSoundType, setActiveSoundType] = useState<"brown" | "rain" | null>(null);
 
@@ -231,7 +232,7 @@ export default function App() {
   const filterNodeRef = useRef<BiquadFilterNode | null>(null);
 
   // Tema Visual Neurodivergente (Paletas Pastéis de Alta Legibilidade por Padrão)
-  // Tema padrão fixo ao abrir o aplicativo: sempre Sálvia & Menta ("sage")
+  // Tema padrão fixo ao abrir o aplicativo: sempre Sálvia e Menta ("sage")
   const [currentTheme, setCurrentTheme] = useState<ThemeId>("sage");
   const [showPaletteModal, setShowPaletteModal] = useState<boolean>(false);
 
@@ -239,7 +240,7 @@ export default function App() {
   useEffect(() => {
     if (typeof document !== "undefined") {
       document.documentElement.setAttribute("data-theme", currentTheme);
-      // Remove resíduos antigos em localStorage para garantir abertura sempre em Sálvia & Menta
+      // Remove resíduos antigos em localStorage para garantir abertura sempre em Sálvia e Menta
       safeStorage.removeItem("desplugatea_theme");
     }
   }, [currentTheme]);
@@ -399,6 +400,7 @@ export default function App() {
 
   const unlockAudio = () => {
     try {
+      unlockMobileAudio();
       // 1. Instancia e inicializa o AudioContext
       if (!audioCtxRef.current) {
         audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -432,6 +434,7 @@ export default function App() {
   };
 
   const playSynthesizedSound = (type: "brown" | "rain") => {
+    unlockMobileAudio();
     if (soundPlaying && activeSoundType === type) {
       stopSynthesizedSound();
       return;
@@ -657,7 +660,7 @@ export default function App() {
         </div>
       )}
 
-      {/* BOTÕES FLUTUANTES DE EMERGÊNCIA (CARTÃO DE AJUDA & PÂNICO SENSORIAL) 
+      {/* BOTÕES FLUTUANTES DE EMERGÊNCIA (CARTÃO DE AJUDA E PÂNICO SENSORIAL) 
           Posicionados elevados (bottom-24) para evitar sobreposição com o cartão nativo do Netlify */}
       <div className="fixed bottom-24 right-4 sm:right-6 z-50 flex flex-col gap-2.5">
         <button
@@ -716,10 +719,10 @@ export default function App() {
                 className="bg-transparent text-[#f4f4f5] font-bold text-xs outline-none cursor-pointer"
                 aria-label="Selecionar tema de cores pastéis para fácil leitura"
               >
-                <option value="sage" className="bg-[#e8eee9] text-[#1e3327]">🌿 Sálvia & Menta (Pastel)</option>
+                <option value="sage" className="bg-[#e8eee9] text-[#1e3327]">🌿 Sálvia e Menta (Pastel)</option>
                 <option value="sky" className="bg-[#e7edf2] text-[#1d3040]">☁️ Céu Empoeirado (Pastel)</option>
                 <option value="lavender" className="bg-[#ece7f2] text-[#2b1f38]">🌸 Lavanda Serena (Pastel)</option>
-                <option value="sand" className="bg-[#f0ebdf] text-[#332c22]">🌾 Areia & Papiro (Pastel)</option>
+                <option value="sand" className="bg-[#f0ebdf] text-[#332c22]">🌾 Areia e Papiro (Pastel)</option>
                 <option value="dark" className="bg-[#18181b] text-[#f4f4f5]">🌙 Modo Escuro Alternativo</option>
               </select>
             </div>
@@ -823,7 +826,7 @@ export default function App() {
 
             <div className="relative z-10 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#2dd4bf] uppercase tracking-widest">Sua Dica de Descompressão Sorteada</span>
+                <span className="text-xs font-bold text-[#2dd4bf] uppercase tracking-widest">Sua Dica Segura Sorteada</span>
                 {selectedTriggerId && (
                   <button 
                     onClick={() => handleTriggerClick(selectedTriggerId)}
@@ -997,7 +1000,7 @@ export default function App() {
               </button>
             </div>
 
-            {/* 2. Fidget Digital Estoura Bolhas & Pop-it (Interativo com Linha Partida) */}
+            {/* 2. Fidget Digital Estoura Bolhas e Pop-it (Interativo com Linha Partida) */}
             <BubblePopper onVibrate={triggerVibrate} />
 
             {/* 3. Gerador de Ruído Marrom Nofail (Web Audio API) */}
@@ -1223,7 +1226,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* C. PREVISIBILIDADE MOTORA & RITMO (JOGO DE ANTECIPAÇÃO E TRILHA CONTÍNUA) */}
+            {/* C. PREVISIBILIDADE MOTORA E RITMO (JOGO DE ANTECIPAÇÃO E TRILHA CONTÍNUA) */}
             <MotorPredictabilityTool onVibrate={triggerVibrate} />
 
             {/* D. JOGO DE ORGANIZAÇÃO REPETITIVA (Monótono e Relaxante) */}
@@ -1315,7 +1318,7 @@ export default function App() {
 
       </div>
 
-      {/* MODAL COM SUGESTÃO DE CORES PASTÉIS & JUSTIFICATIVA NEUROLÓGICA (WCAG AAA) */}
+      {/* MODAL COM SUGESTÃO DE CORES PASTÉIS E JUSTIFICATIVA NEUROLÓGICA (WCAG AAA) */}
       <PastelPaletteModal
         isOpen={showPaletteModal}
         onClose={() => setShowPaletteModal(false)}

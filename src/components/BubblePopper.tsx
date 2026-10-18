@@ -10,6 +10,7 @@ import {
   Layers, 
   Maximize2
 } from "lucide-react";
+import { unlockMobileAudio, getSharedAudioContext } from "../utils/audioSystem";
 
 interface BurstParticle {
   id: number;
@@ -74,9 +75,6 @@ export const BubblePopper: React.FC<BubblePopperProps> = ({ onVibrate }) => {
   const [particles, setParticles] = useState<BurstParticle[]>([]);
   const nextParticleId = useRef<number>(0);
 
-  // Web Audio Context compartilhado e seguro
-  const audioCtxRef = useRef<AudioContext | null>(null);
-
   // Gatilho de vibração seguro
   const triggerVibrate = useCallback((pattern: number | number[]) => {
     if (onVibrate) {
@@ -92,69 +90,76 @@ export const BubblePopper: React.FC<BubblePopperProps> = ({ onVibrate }) => {
     }
   }, [onVibrate]);
 
-  // Síntese de Áudio Realista de "POP!" (Web Audio API sem assets externos)
+  // Síntese de Áudio Realista de "POP!" com suporte especial a iOS e Android
   const playPopSound = useCallback((index: number) => {
     if (soundMode === "mute") return;
 
     try {
-      if (!audioCtxRef.current) {
-        audioCtxRef.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-      }
-      const ctx = audioCtxRef.current;
+      unlockMobileAudio();
+      const ctx = getSharedAudioContext();
+      if (!ctx) return;
+
+      const executePop = () => {
+        try {
+          const now = ctx.currentTime;
+
+          // Variação orgânica de afinação para cada bolha
+          const pitchSeed = (index % 7) * 35;
+          const baseFreq = soundMode === "realistic" ? 520 + pitchSeed : 380 + (index % 5) * 20;
+
+          // 1. Oscilador principal (o "Punch" sonoro com varredura de frequência)
+          const osc = ctx.createOscillator();
+          const oscGain = ctx.createGain();
+
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(baseFreq, now);
+          osc.frequency.exponentialRampToValueAtTime(110, now + 0.05);
+
+          // Volume ampliado para celular Android e iOS
+          const maxGain = soundMode === "realistic" ? 0.75 : 0.45;
+          oscGain.gain.setValueAtTime(maxGain, now);
+          oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+          osc.connect(oscGain);
+          oscGain.connect(ctx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.065);
+
+          // 2. Ruído Branco em Banda Estreita (O "Snap" crocante de estouro)
+          if (soundMode === "realistic") {
+            const noiseBufferSize = Math.floor(ctx.sampleRate * 0.035);
+            const noiseBuffer = ctx.createBuffer(1, noiseBufferSize, ctx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < noiseBufferSize; i++) {
+              output[i] = (Math.random() * 2 - 1) * (1 - i / noiseBufferSize);
+            }
+
+            const noise = ctx.createBufferSource();
+            noise.buffer = noiseBuffer;
+
+            const noiseFilter = ctx.createBiquadFilter();
+            noiseFilter.type = "bandpass";
+            noiseFilter.frequency.setValueAtTime(1800 + pitchSeed * 2, now);
+            noiseFilter.Q.setValueAtTime(2.5, now);
+
+            const noiseGain = ctx.createGain();
+            noiseGain.gain.setValueAtTime(0.40, now);
+            noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(ctx.destination);
+
+            noise.start(now);
+          }
+        } catch {}
+      };
+
       if (ctx.state === "suspended") {
-        ctx.resume().catch(() => {});
-      }
-
-      const now = ctx.currentTime;
-
-      // Variação orgânica de afinação para cada bolha (acústica mais rica e viciante)
-      const pitchSeed = (index % 7) * 35;
-      const baseFreq = soundMode === "realistic" ? 520 + pitchSeed : 380 + (index % 5) * 20;
-
-      // 1. Oscilador principal (o "Punch" sonoro com varredura de frequência em queda)
-      const osc = ctx.createOscillator();
-      const oscGain = ctx.createGain();
-
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(baseFreq, now);
-      osc.frequency.exponentialRampToValueAtTime(110, now + 0.05);
-
-      const maxGain = soundMode === "realistic" ? 0.45 : 0.22;
-      oscGain.gain.setValueAtTime(maxGain, now);
-      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-
-      osc.connect(oscGain);
-      oscGain.connect(ctx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.065);
-
-      // 2. Ruído Branco em Banda Estreita (O "Snap" crocante do plástico ou membrana rompendo)
-      if (soundMode === "realistic") {
-        const noiseBufferSize = Math.floor(ctx.sampleRate * 0.035);
-        const noiseBuffer = ctx.createBuffer(1, noiseBufferSize, ctx.sampleRate);
-        const output = noiseBuffer.getChannelData(0);
-        for (let i = 0; i < noiseBufferSize; i++) {
-          output[i] = (Math.random() * 2 - 1) * (1 - i / noiseBufferSize);
-        }
-
-        const noise = ctx.createBufferSource();
-        noise.buffer = noiseBuffer;
-
-        const noiseFilter = ctx.createBiquadFilter();
-        noiseFilter.type = "bandpass";
-        noiseFilter.frequency.setValueAtTime(1800 + pitchSeed * 2, now);
-        noiseFilter.Q.setValueAtTime(2.5, now);
-
-        const noiseGain = ctx.createGain();
-        noiseGain.gain.setValueAtTime(0.25, now);
-        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
-
-        noise.connect(noiseFilter);
-        noiseFilter.connect(noiseGain);
-        noiseGain.connect(ctx.destination);
-
-        noise.start(now);
+        ctx.resume().then(executePop).catch(executePop);
+      } else {
+        executePop();
       }
     } catch {
       // Ignora silenciosamente em navegadores que bloqueiam áudio
@@ -318,7 +323,7 @@ export const BubblePopper: React.FC<BubblePopperProps> = ({ onVibrate }) => {
           <div className="flex items-center gap-2 text-[var(--accent-readable,#1e3327)]">
             <Gamepad2 className="w-5 h-5 shrink-0" />
             <h3 className="font-bold text-base text-[var(--text-primary,#18261e)]">
-              Estoura Bolhas & Pop-it Sensorial
+              Estoura Bolhas e Pop-it Sensorial
             </h3>
           </div>
 
@@ -450,7 +455,7 @@ export const BubblePopper: React.FC<BubblePopperProps> = ({ onVibrate }) => {
                     </div>
                   )}
 
-                  {/* ESTADO 2: ESTOURADA ("LINHA PARTIDA" & CRATERA DESINFLADA REALISTA) */}
+                  {/* ESTADO 2: ESTOURADA ("LINHA PARTIDA" E CRATERA DESINFLADA REALISTA) */}
                   {popped && (
                     <div 
                       className="bubble-popped-crater w-full h-full rounded-full border-2 border-[var(--border-card,#aec3b4)]/80 flex items-center justify-center relative overflow-hidden transition-all bg-[var(--bg-inner-strong,#b8cdbf)] text-[var(--accent-readable,#1e3327)]"

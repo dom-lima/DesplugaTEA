@@ -9,6 +9,8 @@ import {
   CheckCircle2
 } from "lucide-react";
 
+import { playResonantChime, unlockMobileAudio } from "../utils/audioSystem";
+
 interface MotorPredictabilityToolProps {
   onVibrate?: (ms: number | number[]) => void;
 }
@@ -79,7 +81,6 @@ export const MotorPredictabilityTool: React.FC<MotorPredictabilityToolProps> = (
   const [trackSpeed, setTrackSpeed] = useState<number>(1); // 1x calmo, 0.7x sereno, 1.3x moderado
   const [guideBallPosition, setGuideBallPosition] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
 
-  const audioCtxRef = useRef<AudioContext | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   // Haptic feedback seguro
@@ -95,35 +96,10 @@ export const MotorPredictabilityTool: React.FC<MotorPredictabilityToolProps> = (
     }
   }, [onVibrate]);
 
-  // Síntese Web Audio de Tons Harmônicos Relaxantes (sem assets externos)
+  // Síntese Web Audio de Tons Harmônicos com volume aumentado para Android e compatibilidade total com iOS
   const playHarmonicTone = useCallback((freq: number) => {
     if (!soundEnabled) return;
-    try {
-      if (!audioCtxRef.current) {
-        audioCtxRef.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-      }
-      const ctx = audioCtxRef.current;
-      if (ctx.state === "suspended") {
-        ctx.resume().catch(() => {});
-      }
-
-      const now = ctx.currentTime;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      // Som aveludado de sino musical (senóide pura com decaimento suave)
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, now);
-
-      gain.gain.setValueAtTime(0.18, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.36);
-    } catch {}
+    playResonantChime(freq, 1.35);
   }, [soundEnabled]);
 
   // Lista previsível de passos para o padrão selecionado
@@ -145,6 +121,7 @@ export const MotorPredictabilityTool: React.FC<MotorPredictabilityToolProps> = (
 
   // Ação de toque motor em uma das almofadas (Pad)
   const handlePadPress = (padId: number) => {
+    unlockMobileAudio();
     setActivePadIndex(padId);
     playHarmonicTone(PADS[padId].freq);
     triggerVibrate(35);
@@ -256,7 +233,7 @@ export const MotorPredictabilityTool: React.FC<MotorPredictabilityToolProps> = (
           <div className="flex items-center gap-2 text-[var(--accent-readable,#174d34)]">
             <Compass className="w-5 h-5 shrink-0" />
             <h3 className="font-bold text-base text-[var(--text-primary,#1e3327)]">
-              Previsibilidade Motora & Ritmo
+              Previsibilidade Motora e Ritmo
             </h3>
           </div>
 
@@ -309,7 +286,7 @@ export const MotorPredictabilityTool: React.FC<MotorPredictabilityToolProps> = (
           <div className="flex items-center justify-between p-2.5 bg-[var(--bg-inner,#cddcd1)] rounded-lg border border-[var(--border-card,#aec3b4)] text-xs">
             <div className="flex items-center gap-2">
               <span className="text-[var(--text-muted,#3f5c4c)] font-medium text-[11px]">Próximo passo previsto:</span>
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md font-medium text-xs bg-[var(--bg-inner-strong,#c2d6c7)] text-[var(--text-primary,#1e3327)] border border-[var(--border-card,#aec3b4)]">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md font-medium text-xs bg-[var(--bg-inner-strong,#c2d6c7)] text-[var(--text-secondary,#2a4234)] border border-[var(--border-subtle,#bdd1c3)]">
                 <span className="opacity-75">Passo {expectedStepIndex + 1}:</span>
                 <span>Almofada {PADS[currentExpectedPadId].label} • {PADS[currentExpectedPadId].colorName}</span>
               </span>
@@ -321,7 +298,7 @@ export const MotorPredictabilityTool: React.FC<MotorPredictabilityToolProps> = (
             </div>
           </div>
 
-          {/* Grid dos 4 Blocos Motores (Pads de Toque com Contraste Ameno e Leveza Visual) */}
+          {/* Grid dos 4 Blocos Motores (Pads de Toque com Contraste Suave e Leveza Visual em Relação ao Fundo) */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             {PADS.map((pad) => {
               const isExpected = pad.id === currentExpectedPadId;
@@ -331,24 +308,25 @@ export const MotorPredictabilityTool: React.FC<MotorPredictabilityToolProps> = (
                 <button
                   key={pad.id}
                   onClick={() => handlePadPress(pad.id)}
+                  onPointerDown={() => unlockMobileAudio()}
                   aria-label={`Almofada motora ${pad.label} - ${pad.colorName}. ${isExpected ? "Próxima da sequência" : ""}`}
                   className={`motor-pad-box relative aspect-square sm:aspect-[4/3] rounded-xl p-3 border transition-all duration-150 flex flex-col justify-between cursor-pointer select-none outline-none ${
                     isActive
                       ? "pad-active"
                       : isExpected
-                      ? "pad-expected shadow-sm"
+                      ? "pad-expected"
                       : ""
                   }`}
                   style={{ touchAction: "manipulation" }}
                 >
                   {/* Marcador Superior: Número com contraste suave e ponto indicador sutil */}
                   <div className="flex items-center justify-between w-full">
-                    <span className="text-lg sm:text-xl font-bold leading-none">
+                    <span className="text-base sm:text-lg font-semibold leading-none text-[var(--text-secondary,#2a4234)]">
                       {pad.label}
                     </span>
                     <div className="flex items-center gap-1.5">
                       {isExpected && (
-                        <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-[var(--bg-inner,#cddcd1)] text-[var(--text-secondary,#2a4234)] border border-[var(--border-card,#aec3b4)]">
+                        <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-[var(--bg-inner,#cddcd1)] text-[var(--text-secondary,#2a4234)] border border-[var(--border-subtle,#bdd1c3)] opacity-90">
                           Previsto
                         </span>
                       )}
@@ -356,12 +334,12 @@ export const MotorPredictabilityTool: React.FC<MotorPredictabilityToolProps> = (
                     </div>
                   </div>
 
-                  {/* Nome da cor e nota musical com tipografia confortável */}
+                  {/* Nome da cor e nota musical com tipografia confortável e baixo contraste */}
                   <div className="text-left leading-tight">
-                    <span className="block font-medium text-xs sm:text-sm">
+                    <span className="block font-medium text-xs sm:text-sm text-[var(--text-secondary,#2a4234)]">
                       {pad.colorName}
                     </span>
-                    <span className="text-[10px] text-[var(--text-muted,#3f5c4c)] font-mono">
+                    <span className="text-[10px] text-[var(--text-muted,#3f5c4c)] font-mono opacity-80">
                       {pad.note}
                     </span>
                   </div>
@@ -377,8 +355,8 @@ export const MotorPredictabilityTool: React.FC<MotorPredictabilityToolProps> = (
                 key={idx}
                 className={`flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-medium border transition-all ${
                   idx === expectedStepIndex
-                    ? "bg-[var(--bg-inner-strong,#c2d6c7)] text-[var(--text-primary,#1e3327)] border-[var(--text-muted,#3f5c4c)] scale-105 shadow-sm"
-                    : "bg-[var(--bg-inner,#cddcd1)] text-[var(--text-muted,#3f5c4c)] border-[var(--border-card,#aec3b4)]"
+                    ? "bg-[var(--bg-inner-strong,#c2d6c7)] text-[var(--text-secondary,#2a4234)] border-[var(--border-card,#aec3b4)] scale-105"
+                    : "bg-[var(--bg-inner,#cddcd1)] text-[var(--text-muted,#3f5c4c)] border-[var(--border-subtle,#bdd1c3)] opacity-85"
                 }`}
                 title={`Passo ${idx + 1}: Almofada ${PADS[padId].label}`}
               >
