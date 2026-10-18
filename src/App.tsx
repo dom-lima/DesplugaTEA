@@ -24,7 +24,7 @@ import PastelPaletteModal, { ThemeId } from "./components/PastelPaletteModal";
 import BubblePopper from "./components/BubblePopper";
 import MotorPredictabilityTool from "./components/MotorPredictabilityTool";
 import { safeStorage } from "./utils/storage";
-import { unlockMobileAudio } from "./utils/audioSystem";
+import { unlockMobileAudio, playShapeSuccessSound, playShapeMismatchSound } from "./utils/audioSystem";
 
 // ============================================================================
 // BANCO DE DADOS DE DICAS LOCAIS DE DESCOMPRESSÃO (10 por categoria)
@@ -225,6 +225,20 @@ export default function App() {
   const [gameShapes, setGameShapes] = useState<{ id: number; type: "circle" | "square"; color: string }[]>([]);
   const [selectedShapeId, setSelectedShapeId] = useState<number | null>(null);
   const [sortedCount, setSortedCount] = useState<number>(0);
+  const [shapesSoundEnabled, setShapesSoundEnabled] = useState<boolean>(() => {
+    const saved = safeStorage.getItem("desplugatea_shapes_sound");
+    return saved !== null ? saved === "true" : true;
+  });
+
+  const toggleShapesSound = () => {
+    unlockMobileAudio();
+    setShapesSoundEnabled(prev => {
+      const next = !prev;
+      safeStorage.setItem("desplugatea_shapes_sound", String(next));
+      triggerVibrate(20);
+      return next;
+    });
+  };
 
   // Refs de Áudio
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -558,24 +572,38 @@ export default function App() {
   };
 
   const selectShape = (id: number) => {
+    unlockMobileAudio();
     setSelectedShapeId(id);
     triggerVibrate(30);
   };
 
   const dropShapeInBin = (binType: "circle" | "square") => {
+    unlockMobileAudio();
     if (selectedShapeId === null) return;
     const targetShape = gameShapes.find(s => s.id === selectedShapeId);
-    if (targetShape && targetShape.type === binType) {
+    if (!targetShape) return;
+
+    if (targetShape.type === binType) {
+      // ACERTOU! Toca som recompensador harmonioso se o som estiver ativo
+      if (shapesSoundEnabled) {
+        playShapeSuccessSound();
+      }
       // Remove a forma correta
       setGameShapes(prev => prev.filter(s => s.id !== selectedShapeId));
       setSortedCount(c => c + 1);
       triggerVibrate(60);
-    }
-    setSelectedShapeId(null);
+      setSelectedShapeId(null);
 
-    // Se limpar todas as formas, gera uma nova leva silenciosamente
-    if (gameShapes.length <= 1) {
-      setTimeout(() => generateNewShapes(), 300);
+      // Se limpar todas as formas, gera uma nova leva silenciosamente
+      if (gameShapes.filter(s => s.id !== selectedShapeId).length === 0) {
+        setTimeout(() => generateNewShapes(), 350);
+      }
+    } else {
+      // ERROU! Toca som acústico suave e acolhedor (não punitivo)
+      if (shapesSoundEnabled) {
+        playShapeMismatchSound();
+      }
+      triggerVibrate([35, 45]);
     }
   };
 
@@ -1232,10 +1260,38 @@ export default function App() {
             {/* D. JOGO DE ORGANIZAÇÃO REPETITIVA (Monótono e Relaxante) */}
             <div id="shapes-tool" className="bg-[#27272a] border border-[#3f3f46] rounded-xl p-4 sm:p-6 flex flex-col justify-between min-h-[340px] transition-all duration-500">
               <div className="space-y-1.5">
-                <div className="flex items-center gap-2 text-emerald-400">
-                  <Layers className="w-5 h-5" />
-                  <h3 className="font-bold text-base text-[#f4f4f5]">Organizador de Formas Monótono</h3>
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center gap-2 text-emerald-400">
+                    <Layers className="w-5 h-5" />
+                    <h3 className="font-bold text-base text-[#f4f4f5]">Organizador de Formas Monótono</h3>
+                  </div>
+
+                  {/* Controle de Som do Jogo com Opção de Desligar */}
+                  <button
+                    onClick={toggleShapesSound}
+                    onPointerDown={() => unlockMobileAudio()}
+                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all border cursor-pointer select-none ${
+                      shapesSoundEnabled
+                        ? "bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                        : "bg-zinc-850 hover:bg-zinc-800 text-zinc-400 border-zinc-700"
+                    }`}
+                    title={shapesSoundEnabled ? "Desativar sons de acerto e erro" : "Ativar sons de acerto e erro"}
+                    aria-label={shapesSoundEnabled ? "Desativar sons do jogo" : "Ativar sons do jogo"}
+                  >
+                    {shapesSoundEnabled ? (
+                      <>
+                        <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Sons Ativos</span>
+                      </>
+                    ) : (
+                      <>
+                        <VolumeX className="w-3.5 h-3.5 text-rose-400" />
+                        <span>Mudo</span>
+                      </>
+                    )}
+                  </button>
                 </div>
+
                 <p className="text-xs text-[#a1a1aa] leading-relaxed">
                   Clique em uma forma geométrica e depois clique no seu depósito correspondente. Sem tempo limite, sem pressa, apenas paz e simetria!
                 </p>
@@ -1253,6 +1309,7 @@ export default function App() {
                       <button
                         key={shape.id}
                         onClick={() => selectShape(shape.id)}
+                        onPointerDown={() => unlockMobileAudio()}
                         className={`w-8 h-8 sm:w-10 sm:h-10 transition-all border outline-none cursor-pointer flex items-center justify-center shrink-0 ${shape.color} ${
                           shape.type === "circle" ? "rounded-full" : "rounded-md"
                         } ${selectedShapeId === shape.id ? "ring-2 sm:ring-4 ring-[#2dd4bf] scale-110" : "opacity-80"}`}
@@ -1266,6 +1323,7 @@ export default function App() {
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 border-t border-zinc-800/80 pt-3">
                   <button
                     onClick={() => dropShapeInBin("circle")}
+                    onPointerDown={() => unlockMobileAudio()}
                     disabled={selectedShapeId === null}
                     className="deposit-bin-btn p-2 sm:p-3 bg-zinc-900 hover:bg-zinc-850 rounded border border-zinc-800 text-[10px] sm:text-xs flex flex-col items-center gap-1.5 sm:gap-2 text-zinc-300 disabled:opacity-40 cursor-pointer"
                   >
@@ -1275,6 +1333,7 @@ export default function App() {
 
                   <button
                     onClick={() => dropShapeInBin("square")}
+                    onPointerDown={() => unlockMobileAudio()}
                     disabled={selectedShapeId === null}
                     className="deposit-bin-btn p-2 sm:p-3 bg-zinc-900 hover:bg-zinc-850 rounded border border-zinc-800 text-[10px] sm:text-xs flex flex-col items-center gap-1.5 sm:gap-2 text-zinc-300 disabled:opacity-40 cursor-pointer"
                   >

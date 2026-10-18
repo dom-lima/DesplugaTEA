@@ -935,10 +935,10 @@ body {
 
 .motor-pad-box.pad-expected {
   background-color: var(--bg-inner, #cddcd1) !important;
-  border-color: var(--border-card, #aec3b4) !important;
-  border-width: 1.5px !important;
+  border-color: #df8e53 !important; /* Borda pastel de laranja discreta para guiar crianças sem ofuscamento */
+  border-width: 2.5px !important;
   color: var(--text-secondary, #2a4234) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  box-shadow: 0 1px 4px rgba(223, 142, 83, 0.12) !important;
 }
 
 .motor-pad-box.pad-active {
@@ -947,7 +947,7 @@ body {
   transform: scale(0.98);
 }
 
-/* SÁLVIA E MENTA: Tons pastéis que se fundem ao cartão com contraste repousante */
+/* SÁLVIA E MENTA: Borda pastel de laranja acolhedora apenas no contorno do próximo passo */
 [data-theme="sage"] .motor-pad-box {
   background-color: #d6e2d9 !important;
   border-color: #c1d3c6 !important;
@@ -958,12 +958,13 @@ body {
   border-color: #b5cbbb !important;
 }
 [data-theme="sage"] .motor-pad-box.pad-expected {
-  background-color: #cce0d3 !important;
-  border-color: #9cbca7 !important;
-  color: #273e31 !important;
+  background-color: #d6e2d9 !important; /* Mantém o fundo ameno */
+  border-color: #e08b50 !important; /* Borda pastel de laranja conforme solicitado */
+  border-width: 2.5px !important;
+  color: #2e4738 !important;
 }
 
-/* CÉU SUAVE: Fundo suave e bordas de névoa amenas */
+/* CÉU SUAVE: Borda pastel de damasco/laranja suave */
 [data-theme="sky"] .motor-pad-box {
   background-color: #d6e1e9 !important;
   border-color: #bfd0dc !important;
@@ -974,12 +975,13 @@ body {
   border-color: #b3c7d5 !important;
 }
 [data-theme="sky"] .motor-pad-box.pad-expected {
-  background-color: #cddbe5 !important;
-  border-color: #9eb8ca !important;
-  color: #253947 !important;
+  background-color: #d6e1e9 !important;
+  border-color: #dc8c55 !important;
+  border-width: 2.5px !important;
+  color: #2b4252 !important;
 }
 
-/* LAVANDA: Fundo aveludado e borda macia sem corte visual */
+/* LAVANDA: Borda pastel pêssego/laranja macia */
 [data-theme="lavender"] .motor-pad-box {
   background-color: #dbd3e3 !important;
   border-color: #c6bcd0 !important;
@@ -990,12 +992,13 @@ body {
   border-color: #baaebd !important;
 }
 [data-theme="lavender"] .motor-pad-box.pad-expected {
-  background-color: #d1c5db !important;
-  border-color: #aa9bbe !important;
-  color: #3b2c47 !important;
+  background-color: #dbd3e3 !important;
+  border-color: #d78759 !important;
+  border-width: 2.5px !important;
+  color: #433350 !important;
 }
 
-/* AREIA E PAPIRO: Tons aconchegantes com quase zero contraste de borda */
+/* AREIA E PAPIRO: Borda pastel terracota/laranja orgânica */
 [data-theme="sand"] .motor-pad-box {
   background-color: #e0d8cb !important;
   border-color: #cbc0b0 !important;
@@ -1006,12 +1009,13 @@ body {
   border-color: #c0b3a1 !important;
 }
 [data-theme="sand"] .motor-pad-box.pad-expected {
-  background-color: #d7cdbe !important;
-  border-color: #b2a593 !important;
-  color: #43382c !important;
+  background-color: #e0d8cb !important;
+  border-color: #cc7e47 !important;
+  border-width: 2.5px !important;
+  color: #4b4034 !important;
 }
 
-/* MODO ESCURO: Caixinhas com contraste mínimo contra o fundo #27272a */
+/* MODO ESCURO: Borda pastel de âmbar/laranja suave mineral */
 [data-theme="dark"] .motor-pad-box {
   background-color: #242427 !important;
   border-color: #313137 !important;
@@ -1024,10 +1028,10 @@ body {
 }
 
 [data-theme="dark"] .motor-pad-box.pad-expected {
-  background-color: #28282e !important;
-  border-color: #4a4a54 !important;
-  border-width: 1.5px !important;
-  color: #b4b4bc !important;
+  background-color: #242427 !important;
+  border-color: #c87e47 !important;
+  border-width: 2.5px !important;
+  color: #d4d4d8 !important;
 }
 
 [data-theme="dark"] .motor-pad-box.pad-active {

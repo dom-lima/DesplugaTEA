@@ -6,16 +6,17 @@
  *    - Desbloqueia o canal de áudio via elemento HTML5 de áudio silencioso (ativa AVAudioSession de mídia).
  *    - Inicializa o AudioContext síncrono e retoma o contexto com callback de reprodução garantida.
  * 2. Android: Alto-falantes de celular possuem baixa sensibilidade a graves e frequências puras.
- *    - Aplica compressor dinâmico de estúdio e síntese multi-harmônica rica, aumentando significativamente
- *      o volume e a presença acústica sem distorção.
+ *    - Aplica compressor dinâmico de estúdio, estágio de makeup gain e síntese multi-harmônica rica,
+ *      aumentando expressivamente o volume e a presença acústica sem distorção.
  */
 
 // Singleton global de AudioContext
 let sharedAudioCtx: AudioContext | null = null;
 let isAudioUnlocked = false;
 let isMediaSessionUnlocked = false;
+let silentAudioEl: HTMLAudioElement | null = null;
 
-// Buffer de silêncio WAV em base64 para acordar o hardware de som do iOS
+// Buffer de silêncio WAV em base64 válido para acordar o hardware de som do iOS
 const SILENT_WAV_BASE64 = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
 
 export const getSharedAudioContext = (): AudioContext | null => {
@@ -49,20 +50,23 @@ export const unlockMobileAudio = () => {
   if (typeof window === "undefined") return;
 
   // 1. Desbloqueia sessão de mídia do iOS (contorna botão silencioso do iPhone)
-  if (!isMediaSessionUnlocked) {
-    try {
-      const audioEl = new Audio(SILENT_WAV_BASE64);
-      audioEl.volume = 0.01;
-      const playPromise = audioEl.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          isMediaSessionUnlocked = true;
-        }).catch(() => {
-          // Ignora se o navegador adiar
-        });
-      }
-    } catch {}
-  }
+  try {
+    if (!silentAudioEl) {
+      silentAudioEl = document.createElement("audio");
+      silentAudioEl.setAttribute("playsinline", "true");
+      silentAudioEl.setAttribute("webkit-playsinline", "true");
+      silentAudioEl.src = SILENT_WAV_BASE64;
+      silentAudioEl.volume = 0.05;
+    }
+    const playPromise = silentAudioEl.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        isMediaSessionUnlocked = true;
+      }).catch(() => {
+        // Ignora se o navegador adiar
+      });
+    }
+  } catch {}
 
   // 2. Garante o AudioContext ativo
   const ctx = getSharedAudioContext();
@@ -98,11 +102,11 @@ if (typeof window !== "undefined") {
 
 /**
  * Toca um tom harmônico de sino/marimba musical rico, nítido e com volume ampliado.
- * Perfeito para o Sequenciador Motor no Android e iOS:
+ * Perfeito para a Previsibilidade Motora e Ritmo no Android e iOS:
  * - 3 camadas harmônicas (Fundamental + Oitava + Quinta)
- * - Compressor dinâmico para máxima audibilidade em micro-alto-falantes de celulares
+ * - Compressor dinâmico + Make-up Gain de saída para alto volume em micro-alto-falantes de celulares
  */
-export const playResonantChime = (frequency: number, masterVolume = 1.3) => {
+export const playResonantChime = (frequency: number, masterVolume = 1.6) => {
   if (typeof window === "undefined") return;
 
   unlockMobileAudio();
@@ -113,14 +117,19 @@ export const playResonantChime = (frequency: number, masterVolume = 1.3) => {
     try {
       const now = ctx.currentTime;
 
-      // Compressor dinâmico: eleva o volume perceptível no Android sem estourar o áudio
+      // Make-up Gain de saída para elevar o volume sem clipping
+      const masterOutput = ctx.createGain();
+      masterOutput.gain.setValueAtTime(1.65, now);
+      masterOutput.connect(ctx.destination);
+
+      // Compressor dinâmico: eleva o volume perceptível no Android
       const compressor = ctx.createDynamicsCompressor();
-      compressor.threshold.setValueAtTime(-18, now);
-      compressor.knee.setValueAtTime(16, now);
-      compressor.ratio.setValueAtTime(4, now);
-      compressor.attack.setValueAtTime(0.003, now);
+      compressor.threshold.setValueAtTime(-16, now);
+      compressor.knee.setValueAtTime(12, now);
+      compressor.ratio.setValueAtTime(3.5, now);
+      compressor.attack.setValueAtTime(0.002, now);
       compressor.release.setValueAtTime(0.25, now);
-      compressor.connect(ctx.destination);
+      compressor.connect(masterOutput);
 
       // 1. Oscilador Fundamental (Corpo grave-médio do som, onda senoidal pura)
       const osc1 = ctx.createOscillator();
@@ -128,7 +137,7 @@ export const playResonantChime = (frequency: number, masterVolume = 1.3) => {
       osc1.type = "sine";
       osc1.frequency.setValueAtTime(frequency, now);
 
-      const fundamentalVol = Math.min(1.0, masterVolume * 1.15);
+      const fundamentalVol = Math.min(1.0, masterVolume * 1.1);
       gain1.gain.setValueAtTime(fundamentalVol, now);
       gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.52);
 
@@ -143,14 +152,14 @@ export const playResonantChime = (frequency: number, masterVolume = 1.3) => {
       osc2.type = "triangle";
       osc2.frequency.setValueAtTime(frequency * 2, now);
 
-      const harmonicVol = Math.min(0.85, masterVolume * 0.60);
+      const harmonicVol = Math.min(0.9, masterVolume * 0.75);
       gain2.gain.setValueAtTime(harmonicVol, now);
-      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.36);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
 
       osc2.connect(gain2);
       gain2.connect(compressor);
       osc2.start(now);
-      osc2.stop(now + 0.38);
+      osc2.stop(now + 0.40);
 
       // 3. Brilho Acústico de Sino (Quinta justa / harmônico superior suave)
       const osc3 = ctx.createOscillator();
@@ -158,20 +167,137 @@ export const playResonantChime = (frequency: number, masterVolume = 1.3) => {
       osc3.type = "sine";
       osc3.frequency.setValueAtTime(frequency * 3, now);
 
-      const chimeVol = Math.min(0.45, masterVolume * 0.28);
+      const chimeVol = Math.min(0.55, masterVolume * 0.4);
       gain3.gain.setValueAtTime(chimeVol, now);
-      gain3.gain.exponentialRampToValueAtTime(0.0001, now + 0.24);
+      gain3.gain.exponentialRampToValueAtTime(0.0001, now + 0.26);
 
       osc3.connect(gain3);
       gain3.connect(compressor);
       osc3.start(now);
-      osc3.stop(now + 0.25);
+      osc3.stop(now + 0.28);
     } catch (err) {
       console.warn("[DesplugaTEA Audio] Erro ao reproduzir tom:", err);
     }
   };
 
-  // No iOS Safari, se o contexto estiver suspenso, retoma antes de agendar os nós
+  // No iOS Safari, garante que o contexto é retomado e toca síncrono
+  if (ctx.state === "suspended") {
+    ctx.resume().then(executePlay).catch(executePlay);
+  } else {
+    executePlay();
+  }
+};
+
+/**
+ * Som de Acerto (Sucesso) para o Organizador de Formas Monótono.
+ * Toca um arpejo melódico acolhedor de 2 notas com volume ampliado para Android e iOS
+ * transmitindo reforço positivo imediato e sensação de satisfação.
+ */
+export const playShapeSuccessSound = (volume = 1.35) => {
+  if (typeof window === "undefined") return;
+
+  unlockMobileAudio();
+  const ctx = getSharedAudioContext();
+  if (!ctx) return;
+
+  const executePlay = () => {
+    try {
+      const now = ctx.currentTime;
+
+      // Ganho de saída ampliado
+      const masterOutput = ctx.createGain();
+      masterOutput.gain.setValueAtTime(1.4, now);
+      masterOutput.connect(ctx.destination);
+
+      const compressor = ctx.createDynamicsCompressor();
+      compressor.threshold.setValueAtTime(-16, now);
+      compressor.knee.setValueAtTime(14, now);
+      compressor.ratio.setValueAtTime(3.5, now);
+      compressor.attack.setValueAtTime(0.003, now);
+      compressor.release.setValueAtTime(0.20, now);
+      compressor.connect(masterOutput);
+
+      // Nota 1 (Dó 523Hz)
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = "sine";
+      osc1.frequency.setValueAtTime(523.25, now);
+      gain1.gain.setValueAtTime(volume * 0.9, now);
+      gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.30);
+      osc1.connect(gain1);
+      gain1.connect(compressor);
+      osc1.start(now);
+      osc1.stop(now + 0.31);
+
+      // Nota 2 (Sol 784Hz - arpejo alegre e acolhedor)
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = "triangle";
+      osc2.frequency.setValueAtTime(783.99, now + 0.08);
+      gain2.gain.setValueAtTime(0.0001, now);
+      gain2.gain.setValueAtTime(volume * 1.0, now + 0.08);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+      osc2.connect(gain2);
+      gain2.connect(compressor);
+      osc2.start(now + 0.08);
+      osc2.stop(now + 0.46);
+    } catch {}
+  };
+
+  if (ctx.state === "suspended") {
+    ctx.resume().then(executePlay).catch(executePlay);
+  } else {
+    executePlay();
+  }
+};
+
+/**
+ * Som de Erro (Desajuste) Não-Punitivo para o Organizador de Formas Monótono.
+ * Som quente, grave e suave de madeira/toque neutro (sem buzinas ou ruídos estridentes).
+ * Apenas sinaliza com gentileza que a forma pertence ao outro depósito.
+ */
+export const playShapeMismatchSound = (volume = 1.15) => {
+  if (typeof window === "undefined") return;
+
+  unlockMobileAudio();
+  const ctx = getSharedAudioContext();
+  if (!ctx) return;
+
+  const executePlay = () => {
+    try {
+      const now = ctx.currentTime;
+
+      const masterOutput = ctx.createGain();
+      masterOutput.gain.setValueAtTime(1.3, now);
+      masterOutput.connect(ctx.destination);
+
+      const compressor = ctx.createDynamicsCompressor();
+      compressor.connect(masterOutput);
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+
+      osc.type = "triangle";
+      // Deslize suave de 240Hz para 180Hz (toque acústico macio de madeira)
+      osc.frequency.setValueAtTime(240, now);
+      osc.frequency.exponentialRampToValueAtTime(180, now + 0.18);
+
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(700, now);
+
+      gain.gain.setValueAtTime(volume * 0.9, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.20);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(compressor);
+
+      osc.start(now);
+      osc.stop(now + 0.21);
+    } catch {}
+  };
+
   if (ctx.state === "suspended") {
     ctx.resume().then(executePlay).catch(executePlay);
   } else {
