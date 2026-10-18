@@ -1,0 +1,6 @@
+{
+  "name": "DesplugaTEA",
+  "description": "Aplicativo para ajudar pessoas autistas a prevenirem e lidarem com a sobrecarga sensorial.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

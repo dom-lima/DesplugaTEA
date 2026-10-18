@@ -1,0 +1,699 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Custom base styles for comfortable viewing */
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Accessible transitions */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   PALETAS NEURODIVERGENTES CALIBRADAS — CONTRASTE SUAVE E SEM OFUSCAMENTO
+   - Sem branco puro (#ffffff) que causa ofuscamento e fadiga visual
+   - Sem preto puro (#000000) que gera contraste excessivamente agressivo
+   - Verdes escuros e profundos (#174d34) para leitura perfeita (zero verde claro ilegível)
+   - Contraste balanceado (~6.5:1 a 7.5:1) recomendado para TEA, TDAH e Irlen
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   1. SÁLVIA VELUDO & MENTA SERENA (SAGE)
+   ---------------------------------------------------------------------------- */
+[data-theme="sage"] {
+  --bg-app: #e8eee9;
+  --bg-card: #d9e4dc;
+  --bg-inner: #cddcd1;
+  --border-card: #aec3b4;
+  --border-subtle: #bdd1c3;
+  --text-primary: #1e3327;
+  --text-secondary: #2a4234;
+  --text-muted: #3f5c4c;
+  --accent-readable: #174d34;
+}
+
+[data-theme="sage"] .app-theme-bg,
+[data-theme="sage"] .bg-\[\#18181b\] {
+  background-color: #e8eee9 !important;
+  color: #1e3327 !important;
+}
+
+/* Cartões e superfícies - tom suave aveludado, NUNCA branco agressivo */
+[data-theme="sage"] .bg-\[\#27272a\] {
+  background-color: #d9e4dc !important;
+}
+
+/* Recipientes internos e poços */
+[data-theme="sage"] .bg-slate-950,
+[data-theme="sage"] .bg-zinc-900,
+[data-theme="sage"] .bg-zinc-950 {
+  background-color: #cddcd1 !important;
+  border-color: #aec3b4 !important;
+}
+
+/* Bordas estruturais */
+[data-theme="sage"] .border-\[\#3f3f46\],
+[data-theme="sage"] .border-zinc-800,
+[data-theme="sage"] .border-zinc-700 {
+  border-color: #aec3b4 !important;
+}
+
+[data-theme="sage"] .border-\[\#27272a\] {
+  border-color: #bdd1c3 !important;
+}
+
+/* Tipografia suave com contraste balanceado (6.5:1 a 7.5:1) */
+[data-theme="sage"] .text-\[\#f4f4f5\],
+[data-theme="sage"] .text-zinc-100,
+[data-theme="sage"] .text-zinc-200 {
+  color: #1e3327 !important;
+}
+
+[data-theme="sage"] .text-\[\#d4d4d8\],
+[data-theme="sage"] .text-zinc-300 {
+  color: #2a4234 !important;
+}
+
+[data-theme="sage"] .text-\[\#a1a1aa\],
+[data-theme="sage"] .text-zinc-400,
+[data-theme="sage"] .text-zinc-500 {
+  color: #3f5c4c !important;
+}
+
+[data-theme="sage"] .text-\[\#52525b\],
+[data-theme="sage"] .text-\[\#3f3f46\] {
+  color: #4b6657 !important;
+}
+
+/* CORREÇÃO DO VERDE: Substituto legível, profundo e mineral (NUNCA verde claro) */
+[data-theme="sage"] .text-\[\#2dd4bf\],
+[data-theme="sage"] .text-teal-300,
+[data-theme="sage"] .text-teal-400,
+[data-theme="sage"] .text-emerald-300,
+[data-theme="sage"] .text-emerald-400,
+[data-theme="sage"] .text-emerald-200,
+[data-theme="sage"] .text-teal-200 {
+  color: #174d34 !important;
+}
+
+/* Acentos de outras cores adaptados para alta legibilidade sobre pastel */
+[data-theme="sage"] .text-sky-300,
+[data-theme="sage"] .text-sky-400,
+[data-theme="sage"] .text-sky-200 {
+  color: #1b4d6f !important;
+}
+
+[data-theme="sage"] .text-amber-300,
+[data-theme="sage"] .text-amber-400,
+[data-theme="sage"] .text-amber-200 {
+  color: #704913 !important;
+}
+
+[data-theme="sage"] .text-purple-300,
+[data-theme="sage"] .text-purple-400,
+[data-theme="sage"] .text-purple-200 {
+  color: #553474 !important;
+}
+
+[data-theme="sage"] .text-rose-300,
+[data-theme="sage"] .text-rose-400,
+[data-theme="sage"] .text-pink-300,
+[data-theme="sage"] .text-pink-400 {
+  color: #792535 !important;
+}
+
+[data-theme="sage"] .text-indigo-300,
+[data-theme="sage"] .text-indigo-400 {
+  color: #353f7c !important;
+}
+
+/* Caixas destacadas e avisos (Aviso de Carinho, Refúgio, etc.) */
+[data-theme="sage"] .bg-teal-950\/15,
+[data-theme="sage"] .bg-\[\#134e4a\]\/10,
+[data-theme="sage"] .bg-\[\#134e4a\]\/20,
+[data-theme="sage"] .bg-emerald-950\/20,
+[data-theme="sage"] .bg-teal-950\/20 {
+  background-color: #c7ded0 !important;
+  border-color: #9cbda8 !important;
+  color: #1e3327 !important;
+}
+
+[data-theme="sage"] .bg-sky-950\/20 {
+  background-color: #c8d9e6 !important;
+  border-color: #9cb6cb !important;
+}
+
+[data-theme="sage"] .bg-amber-950\/20 {
+  background-color: #e5dec9 !important;
+  border-color: #c7ba9d !important;
+}
+
+[data-theme="sage"] .bg-purple-950\/20 {
+  background-color: #ded4e8 !important;
+  border-color: #baa8ce !important;
+}
+
+[data-theme="sage"] .bg-emerald-500\/10,
+[data-theme="sage"] .bg-teal-500\/10,
+[data-theme="sage"] .bg-teal-500\/15,
+[data-theme="sage"] .bg-sky-500\/10,
+[data-theme="sage"] .bg-indigo-500\/10,
+[data-theme="sage"] .bg-pink-500\/10 {
+  background-color: #c9ded2 !important;
+  border-color: #9bbfa9 !important;
+}
+
+[data-theme="sage"] .border-\[\#2dd4bf\],
+[data-theme="sage"] .border-\[\#2dd4bf\]\/20,
+[data-theme="sage"] .border-\[\#2dd4bf\]\/25,
+[data-theme="sage"] .border-teal-500\/25,
+[data-theme="sage"] .border-teal-400\/30,
+[data-theme="sage"] .border-emerald-500\/30,
+[data-theme="sage"] .border-emerald-400\/20 {
+  border-color: #95bda3 !important;
+}
+
+[data-theme="sage"] .mascot-badge {
+  background-color: #174d34 !important;
+}
+
+[data-theme="sage"] .mascot-badge rect {
+  fill: #e8eee9 !important;
+}
+
+[data-theme="sage"] .mascot-badge circle,
+[data-theme="sage"] .mascot-badge path {
+  fill: #174d34 !important;
+  stroke: #174d34 !important;
+}
+
+[data-theme="sage"] .hover\:bg-\[\#3f3f46\]:hover,
+[data-theme="sage"] .hover\:bg-zinc-800:hover,
+[data-theme="sage"] .hover\:bg-zinc-750:hover,
+[data-theme="sage"] .hover\:bg-zinc-850:hover {
+  background-color: #cadad0 !important;
+}
+
+/* ----------------------------------------------------------------------------
+   2. CÉU SUAVE & NÉVOA (SKY)
+   ---------------------------------------------------------------------------- */
+[data-theme="sky"] {
+  --bg-app: #e7edf2;
+  --bg-card: #d9e3eb;
+  --bg-inner: #ccdbe5;
+  --border-card: #abc0d0;
+  --border-subtle: #bccfe0;
+  --text-primary: #1d3040;
+  --text-secondary: #293e50;
+  --text-muted: #3d5469;
+  --accent-readable: #174f37;
+}
+
+[data-theme="sky"] .app-theme-bg,
+[data-theme="sky"] .bg-\[\#18181b\] {
+  background-color: #e7edf2 !important;
+  color: #1d3040 !important;
+}
+
+[data-theme="sky"] .bg-\[\#27272a\] {
+  background-color: #d9e3eb !important;
+}
+
+[data-theme="sky"] .bg-slate-950,
+[data-theme="sky"] .bg-zinc-900,
+[data-theme="sky"] .bg-zinc-950 {
+  background-color: #ccdbe5 !important;
+  border-color: #abc0d0 !important;
+}
+
+[data-theme="sky"] .border-\[\#3f3f46\],
+[data-theme="sky"] .border-zinc-800,
+[data-theme="sky"] .border-zinc-700 {
+  border-color: #abc0d0 !important;
+}
+
+[data-theme="sky"] .border-\[\#27272a\] {
+  border-color: #bccfe0 !important;
+}
+
+[data-theme="sky"] .text-\[\#f4f4f5\],
+[data-theme="sky"] .text-zinc-100,
+[data-theme="sky"] .text-zinc-200 {
+  color: #1d3040 !important;
+}
+
+[data-theme="sky"] .text-\[\#d4d4d8\],
+[data-theme="sky"] .text-zinc-300 {
+  color: #293e50 !important;
+}
+
+[data-theme="sky"] .text-\[\#a1a1aa\],
+[data-theme="sky"] .text-zinc-400,
+[data-theme="sky"] .text-zinc-500 {
+  color: #3d5469 !important;
+}
+
+[data-theme="sky"] .text-\[\#52525b\],
+[data-theme="sky"] .text-\[\#3f3f46\] {
+  color: #4b6479 !important;
+}
+
+[data-theme="sky"] .text-\[\#2dd4bf\],
+[data-theme="sky"] .text-teal-300,
+[data-theme="sky"] .text-teal-400,
+[data-theme="sky"] .text-emerald-300,
+[data-theme="sky"] .text-emerald-400,
+[data-theme="sky"] .text-emerald-200,
+[data-theme="sky"] .text-teal-200 {
+  color: #165038 !important;
+}
+
+[data-theme="sky"] .text-sky-300,
+[data-theme="sky"] .text-sky-400,
+[data-theme="sky"] .text-sky-200 {
+  color: #184a6e !important;
+}
+
+[data-theme="sky"] .text-amber-300,
+[data-theme="sky"] .text-amber-400,
+[data-theme="sky"] .text-amber-200 {
+  color: #744a13 !important;
+}
+
+[data-theme="sky"] .text-purple-300,
+[data-theme="sky"] .text-purple-400 {
+  color: #583677 !important;
+}
+
+[data-theme="sky"] .text-rose-300,
+[data-theme="sky"] .text-rose-400,
+[data-theme="sky"] .text-pink-300 {
+  color: #7c2536 !important;
+}
+
+[data-theme="sky"] .text-indigo-300,
+[data-theme="sky"] .text-indigo-400 {
+  color: #34407b !important;
+}
+
+[data-theme="sky"] .bg-teal-950\/15,
+[data-theme="sky"] .bg-\[\#134e4a\]\/10,
+[data-theme="sky"] .bg-\[\#134e4a\]\/20,
+[data-theme="sky"] .bg-emerald-950\/20,
+[data-theme="sky"] .bg-teal-950\/20 {
+  background-color: #c9dde8 !important;
+  border-color: #9cb8cc !important;
+  color: #1d3040 !important;
+}
+
+[data-theme="sky"] .bg-emerald-500\/10,
+[data-theme="sky"] .bg-teal-500\/10,
+[data-theme="sky"] .bg-teal-500\/15,
+[data-theme="sky"] .bg-sky-500\/10,
+[data-theme="sky"] .bg-indigo-500\/10,
+[data-theme="sky"] .bg-pink-500\/10 {
+  background-color: #c8d9e6 !important;
+  border-color: #9bb6cb !important;
+}
+
+[data-theme="sky"] .border-\[\#2dd4bf\],
+[data-theme="sky"] .border-\[\#2dd4bf\]\/20,
+[data-theme="sky"] .border-\[\#2dd4bf\]\/25,
+[data-theme="sky"] .border-teal-500\/25,
+[data-theme="sky"] .border-teal-400\/30 {
+  border-color: #94b5cb !important;
+}
+
+[data-theme="sky"] .mascot-badge {
+  background-color: #184a6e !important;
+}
+
+[data-theme="sky"] .mascot-badge rect {
+  fill: #e7edf2 !important;
+}
+
+[data-theme="sky"] .mascot-badge circle,
+[data-theme="sky"] .mascot-badge path {
+  fill: #184a6e !important;
+  stroke: #184a6e !important;
+}
+
+[data-theme="sky"] .hover\:bg-\[\#3f3f46\]:hover,
+[data-theme="sky"] .hover\:bg-zinc-800:hover,
+[data-theme="sky"] .hover\:bg-zinc-750:hover,
+[data-theme="sky"] .hover\:bg-zinc-850:hover {
+  background-color: #c8d7e4 !important;
+}
+
+/* ----------------------------------------------------------------------------
+   3. LAVANDA VELUDO & AMETISTA (LAVENDER)
+   ---------------------------------------------------------------------------- */
+[data-theme="lavender"] {
+  --bg-app: #ece7f2;
+  --bg-card: #ded6e6;
+  --bg-inner: #d1c7dc;
+  --border-card: #b9abc9;
+  --border-subtle: #cbbddb;
+  --text-primary: #2b1f38;
+  --text-secondary: #3a2c4d;
+  --text-muted: #55456b;
+  --accent-readable: #174f35;
+}
+
+[data-theme="lavender"] .app-theme-bg,
+[data-theme="lavender"] .bg-\[\#18181b\] {
+  background-color: #ece7f2 !important;
+  color: #2b1f38 !important;
+}
+
+[data-theme="lavender"] .bg-\[\#27272a\] {
+  background-color: #ded6e6 !important;
+}
+
+[data-theme="lavender"] .bg-slate-950,
+[data-theme="lavender"] .bg-zinc-900,
+[data-theme="lavender"] .bg-zinc-950 {
+  background-color: #d1c7dc !important;
+  border-color: #b9abc9 !important;
+}
+
+[data-theme="lavender"] .border-\[\#3f3f46\],
+[data-theme="lavender"] .border-zinc-800,
+[data-theme="lavender"] .border-zinc-700 {
+  border-color: #b9abc9 !important;
+}
+
+[data-theme="lavender"] .border-\[\#27272a\] {
+  border-color: #cbbddb !important;
+}
+
+[data-theme="lavender"] .text-\[\#f4f4f5\],
+[data-theme="lavender"] .text-zinc-100,
+[data-theme="lavender"] .text-zinc-200 {
+  color: #2b1f38 !important;
+}
+
+[data-theme="lavender"] .text-\[\#d4d4d8\],
+[data-theme="lavender"] .text-zinc-300 {
+  color: #3a2c4d !important;
+}
+
+[data-theme="lavender"] .text-\[\#a1a1aa\],
+[data-theme="lavender"] .text-zinc-400,
+[data-theme="lavender"] .text-zinc-500 {
+  color: #55456b !important;
+}
+
+[data-theme="lavender"] .text-\[\#52525b\],
+[data-theme="lavender"] .text-\[\#3f3f46\] {
+  color: #695682 !important;
+}
+
+[data-theme="lavender"] .text-\[\#2dd4bf\],
+[data-theme="lavender"] .text-teal-300,
+[data-theme="lavender"] .text-teal-400,
+[data-theme="lavender"] .text-emerald-300,
+[data-theme="lavender"] .text-emerald-400,
+[data-theme="lavender"] .text-emerald-200,
+[data-theme="lavender"] .text-teal-200 {
+  color: #174f35 !important;
+}
+
+[data-theme="lavender"] .text-sky-300,
+[data-theme="lavender"] .text-sky-400 {
+  color: #1c496c !important;
+}
+
+[data-theme="lavender"] .text-purple-300,
+[data-theme="lavender"] .text-purple-400 {
+  color: #5a357c !important;
+}
+
+[data-theme="lavender"] .text-amber-300,
+[data-theme="lavender"] .text-amber-400 {
+  color: #734912 !important;
+}
+
+[data-theme="lavender"] .text-rose-300,
+[data-theme="lavender"] .text-rose-400,
+[data-theme="lavender"] .text-pink-300 {
+  color: #7c2436 !important;
+}
+
+[data-theme="lavender"] .text-indigo-300,
+[data-theme="lavender"] .text-indigo-400 {
+  color: #3b367d !important;
+}
+
+[data-theme="lavender"] .bg-teal-950\/15,
+[data-theme="lavender"] .bg-\[\#134e4a\]\/10,
+[data-theme="lavender"] .bg-\[\#134e4a\]\/20,
+[data-theme="lavender"] .bg-emerald-950\/20,
+[data-theme="lavender"] .bg-teal-950\/20 {
+  background-color: #d1c6df !important;
+  border-color: #b09fc4 !important;
+  color: #2b1f38 !important;
+}
+
+[data-theme="lavender"] .bg-emerald-500\/10,
+[data-theme="lavender"] .bg-teal-500\/10,
+[data-theme="lavender"] .bg-teal-500\/15,
+[data-theme="lavender"] .bg-sky-500\/10,
+[data-theme="lavender"] .bg-indigo-500\/10,
+[data-theme="lavender"] .bg-pink-500\/10 {
+  background-color: #d4c9e0 !important;
+  border-color: #b3a4c5 !important;
+}
+
+[data-theme="lavender"] .border-\[\#2dd4bf\],
+[data-theme="lavender"] .border-\[\#2dd4bf\]\/20,
+[data-theme="lavender"] .border-\[\#2dd4bf\]\/25,
+[data-theme="lavender"] .border-teal-500\/25,
+[data-theme="lavender"] .border-teal-400\/30 {
+  border-color: #aa99c0 !important;
+}
+
+[data-theme="lavender"] .mascot-badge {
+  background-color: #5a357c !important;
+}
+
+[data-theme="lavender"] .mascot-badge rect {
+  fill: #ece7f2 !important;
+}
+
+[data-theme="lavender"] .mascot-badge circle,
+[data-theme="lavender"] .mascot-badge path {
+  fill: #5a357c !important;
+  stroke: #5a357c !important;
+}
+
+[data-theme="lavender"] .hover\:bg-\[\#3f3f46\]:hover,
+[data-theme="lavender"] .hover\:bg-zinc-800:hover,
+[data-theme="lavender"] .hover\:bg-zinc-750:hover,
+[data-theme="lavender"] .hover\:bg-zinc-850:hover {
+  background-color: #cfc4d9 !important;
+}
+
+/* ----------------------------------------------------------------------------
+   4. AREIA & PAPIRO ACONCHEGANTE (SAND) — ZERO BRANCO / BAIXO CONTRASTE / IRLEN
+   ---------------------------------------------------------------------------- */
+[data-theme="sand"] {
+  --bg-app: #f0ebdf;
+  --bg-card: #e4ddd0;
+  --bg-inner: #d7cfbf;
+  --border-card: #c0b6a2;
+  --border-subtle: #d0c7b5;
+  --text-primary: #332c22;
+  --text-secondary: #453c30;
+  --text-muted: #5b5244;
+  --accent-readable: #1d5236;
+}
+
+[data-theme="sand"] .app-theme-bg,
+[data-theme="sand"] .bg-\[\#18181b\] {
+  background-color: #f0ebdf !important;
+  color: #332c22 !important;
+}
+
+[data-theme="sand"] .bg-\[\#27272a\] {
+  background-color: #e4ddd0 !important;
+}
+
+[data-theme="sand"] .bg-slate-950,
+[data-theme="sand"] .bg-zinc-900,
+[data-theme="sand"] .bg-zinc-950 {
+  background-color: #d7cfbf !important;
+  border-color: #c0b6a2 !important;
+}
+
+[data-theme="sand"] .border-\[\#3f3f46\],
+[data-theme="sand"] .border-zinc-800,
+[data-theme="sand"] .border-zinc-700 {
+  border-color: #c0b6a2 !important;
+}
+
+[data-theme="sand"] .border-\[\#27272a\] {
+  border-color: #d0c7b5 !important;
+}
+
+[data-theme="sand"] .text-\[\#f4f4f5\],
+[data-theme="sand"] .text-zinc-100,
+[data-theme="sand"] .text-zinc-200 {
+  color: #332c22 !important;
+}
+
+[data-theme="sand"] .text-\[\#d4d4d8\],
+[data-theme="sand"] .text-zinc-300 {
+  color: #453c30 !important;
+}
+
+[data-theme="sand"] .text-\[\#a1a1aa\],
+[data-theme="sand"] .text-zinc-400,
+[data-theme="sand"] .text-zinc-500 {
+  color: #5b5244 !important;
+}
+
+[data-theme="sand"] .text-\[\#52525b\],
+[data-theme="sand"] .text-\[\#3f3f46\] {
+  color: #6e6454 !important;
+}
+
+[data-theme="sand"] .text-\[\#2dd4bf\],
+[data-theme="sand"] .text-teal-300,
+[data-theme="sand"] .text-teal-400,
+[data-theme="sand"] .text-emerald-300,
+[data-theme="sand"] .text-emerald-400,
+[data-theme="sand"] .text-emerald-200,
+[data-theme="sand"] .text-teal-200 {
+  color: #1d5236 !important;
+}
+
+[data-theme="sand"] .text-sky-300,
+[data-theme="sand"] .text-sky-400 {
+  color: #1e4a6a !important;
+}
+
+[data-theme="sand"] .text-amber-300,
+[data-theme="sand"] .text-amber-400 {
+  color: #704812 !important;
+}
+
+[data-theme="sand"] .text-purple-300,
+[data-theme="sand"] .text-purple-400 {
+  color: #593674 !important;
+}
+
+[data-theme="sand"] .text-rose-300,
+[data-theme="sand"] .text-rose-400,
+[data-theme="sand"] .text-pink-300 {
+  color: #7a2535 !important;
+}
+
+[data-theme="sand"] .text-indigo-300,
+[data-theme="sand"] .text-indigo-400 {
+  color: #3c3a7a !important;
+}
+
+[data-theme="sand"] .bg-teal-950\/15,
+[data-theme="sand"] .bg-\[\#134e4a\]\/10,
+[data-theme="sand"] .bg-\[\#134e4a\]\/20,
+[data-theme="sand"] .bg-emerald-950\/20,
+[data-theme="sand"] .bg-teal-950\/20 {
+  background-color: #cec5b3 !important;
+  border-color: #b3a793 !important;
+  color: #332c22 !important;
+}
+
+[data-theme="sand"] .bg-emerald-500\/10,
+[data-theme="sand"] .bg-teal-500\/10,
+[data-theme="sand"] .bg-teal-500\/15,
+[data-theme="sand"] .bg-sky-500\/10,
+[data-theme="sand"] .bg-indigo-500\/10,
+[data-theme="sand"] .bg-pink-500\/10 {
+  background-color: #d8cfbf !important;
+  border-color: #b7ab98 !important;
+}
+
+[data-theme="sand"] .border-\[\#2dd4bf\],
+[data-theme="sand"] .border-\[\#2dd4bf\]\/20,
+[data-theme="sand"] .border-\[\#2dd4bf\]\/25,
+[data-theme="sand"] .border-teal-500\/25,
+[data-theme="sand"] .border-teal-400\/30 {
+  border-color: #baa992 !important;
+}
+
+[data-theme="sand"] .mascot-badge {
+  background-color: #1d5236 !important;
+}
+
+[data-theme="sand"] .mascot-badge rect {
+  fill: #f0ebdf !important;
+}
+
+[data-theme="sand"] .mascot-badge circle,
+[data-theme="sand"] .mascot-badge path {
+  fill: #1d5236 !important;
+  stroke: #1d5236 !important;
+}
+
+[data-theme="sand"] .hover\:bg-\[\#3f3f46\]:hover,
+[data-theme="sand"] .hover\:bg-zinc-800:hover,
+[data-theme="sand"] .hover\:bg-zinc-750:hover,
+[data-theme="sand"] .hover\:bg-zinc-850:hover {
+  background-color: #d6cdbc !important;
+}
+
+/* ----------------------------------------------------------------------------
+   REGRAS ESPECÍFICAS PARA O JOGO ORGANIZADOR DE FORMAS MONÓTONO
+   Garante que o fundo do círculo/quadrado no depósito seja 100% IDÊNTICO ao do campo
+   e que as bordas sejam claras e perfeitamente visíveis em qualquer tema!
+   ---------------------------------------------------------------------------- */
+[data-theme="sage"] .deposit-bin-btn {
+  background-color: #c7ded0 !important;
+  border-color: #a3c2af !important;
+}
+[data-theme="sage"] .deposit-shape-icon {
+  background-color: #c7ded0 !important;
+  border-color: #ffffff !important;
+}
+
+[data-theme="sky"] .deposit-bin-btn {
+  background-color: #c7dbe8 !important;
+  border-color: #9cbccc !important;
+}
+[data-theme="sky"] .deposit-shape-icon {
+  background-color: #c7dbe8 !important;
+  border-color: #ffffff !important;
+}
+
+[data-theme="lavender"] .deposit-bin-btn {
+  background-color: #cec4dc !important;
+  border-color: #aea0c4 !important;
+}
+[data-theme="lavender"] .deposit-shape-icon {
+  background-color: #cec4dc !important;
+  border-color: #ffffff !important;
+}
+
+[data-theme="sand"] .deposit-bin-btn {
+  background-color: #cdc3b0 !important;
+  border-color: #b2a590 !important;
+}
+[data-theme="sand"] .deposit-shape-icon {
+  background-color: #cdc3b0 !important;
+  border-color: #ffffff !important;
+}
