@@ -13,18 +13,16 @@ import {
   Battery,
   Calendar,
   Layers,
-  ChevronLeft,
-  ChevronRight,
   Sparkle,
   Smile,
   Gamepad2,
-  BookOpen,
   Clock,
   Palette
 } from "lucide-react";
 import GroundingTool from "./components/GroundingTool";
 import PastelPaletteModal, { ThemeId } from "./components/PastelPaletteModal";
 import BubblePopper from "./components/BubblePopper";
+import MotorPredictabilityTool from "./components/MotorPredictabilityTool";
 import { safeStorage } from "./utils/storage";
 
 // ============================================================================
@@ -82,124 +80,9 @@ const ADVICE_DATABASE: Record<string, string[]> = {
   ]
 };
 
-// Histórias sociais locais de manutenção
-interface SocialStory {
-  title: string;
-  steps: { text: string; emoji: string }[];
-}
-
-const SOCIAL_STORIES: SocialStory[] = [
-  {
-    title: "Vou ao Médico/Dentista 🩺",
-    steps: [
-      { text: "Hoje tenho uma consulta marcada. É uma visita importante para cuidar da minha saúde física.", emoji: "🏥" },
-      { text: "A sala de espera pode ter sons de televisão, conversas ou luzes fortes.", emoji: "👥" },
-      { text: "Se o barulho me incomodar, eu posso colocar meus abafadores ou fones de ouvido.", emoji: "🎧" },
-      { text: "O profissional pode usar aparelhos barulhentos. Posso pedir para ele me avisar antes de ligar cada um.", emoji: "🪥" },
-      { text: "Ao terminar, eu posso me parabenizar por ter concluído essa etapa importante!", emoji: "🎉" }
-    ]
-  },
-  {
-    title: "Ir ao Supermercado 🛒",
-    steps: [
-      { text: "O supermercado é um lugar cheio de cores, embalagens e pessoas circulando.", emoji: "🏪" },
-      { text: "Se houver música alta ou anúncios no alto-falante, posso focar no meu Som de Chuva do DesplugaTEA.", emoji: "🌧️" },
-      { text: "Fazer uma lista escrita me ajuda a saber exatamente onde ir, sem precisar tomar muitas decisões na hora.", emoji: "📝" },
-      { text: "Se eu me sentir cansado, posso parar num corredor mais calmo ou ir para perto do caixa devagar.", emoji: "🧘" },
-      { text: "Depois das compras, posso ir para casa e descansar no meu cantinho favorito.", emoji: "🏠" }
-    ]
-  },
-  {
-    title: "Mudança Surpresa de Planos 🔄",
-    steps: [
-      { text: "Eu tinha planejado fazer algo hoje, mas por algum motivo as coisas mudaram.", emoji: "📅" },
-      { text: "Isso pode me deixar triste, bravo ou confuso por alguns instantes. Esse sentimento é normal.", emoji: "😟" },
-      { text: "Posso fechar meus olhos e respirar no ritmo do balão por 1 minuto para dar tempo de aceitar a mudança.", emoji: "🎈" },
-      { text: "A nova atividade pode não ser o que eu queria, mas eu consigo lidar com ela um passo de cada vez.", emoji: "🚶" },
-      { text: "Se eu precisar de ajuda para me reorganizar, posso pedir apoio de alguém querido ou do meu psicólogo.", emoji: "🤝" }
-    ]
-  },
-  {
-    title: "Desentendimento Familiar (Gerenciando Conflitos) 🗣️",
-    steps: [
-      { text: "Às vezes, minha família e eu pensamos de formas diferentes e isso pode causar uma discussão.", emoji: "🗣️" },
-      { text: "Quando eles não concordam comigo, posso sentir meu rosto esquentar ou minha barriga apertar. Isso é normal.", emoji: "😟" },
-      { text: "Em vez de gritar, posso respirar fundo e contar até 5 ou ir para o meu quarto por alguns minutos.", emoji: "🧘" },
-      { text: "Quando estiver mais calmo, posso dizer: 'Eu me sinto chateado porque...' e ouvir o que eles têm a dizer.", emoji: "💬" },
-      { text: "Famílias podem discordar e continuar se gostando. Resolver problemas com calma me deixa orgulhoso.", emoji: "💖" }
-    ]
-  },
-  {
-    title: "Entrevista de Emprego (Situação de Alta Pressão) 💼",
-    steps: [
-      { text: "Vou chegar 10 minutos antes do horário e avisar na recepção que tenho uma entrevista.", emoji: "⌚" },
-      { text: "Quando o entrevistador me chamar, vou olhar para ele (ou para a testa dele) e dizer 'Olá' com clareza.", emoji: "🤝" },
-      { text: "Eles farão perguntas sobre o que sei fazer. Posso levar um tempo para pensar antes de responder.", emoji: "💭" },
-      { text: "Se eu não entender uma pergunta, tudo bem dizer: 'Pode repetir, por favor?' ou 'Não entendi'.", emoji: "❓" },
-      { text: "Ao terminar, vou agradecer pelo tempo deles. Fiz o meu melhor e isso é o suficiente por hoje.", emoji: "✨" }
-    ]
-  },
-  {
-    title: "Preparação para Prova (Ansiedade de Desempenho) 📝",
-    steps: [
-      { text: "Antes da prova, vou revisar minhas anotações, mas também preciso descansar meu cérebro.", emoji: "📚" },
-      { text: "Na noite anterior, vou dormir cedo para minha mente estar descansada e pronta.", emoji: "😴" },
-      { text: "Durante a prova, se eu sentir medo, vou fechar os olhos por um segundo e lembrar de respirar devagar.", emoji: "🧘" },
-      { text: "Vou ler uma questão de cada vez. Se não souber uma resposta, posso pular e voltar nela depois.", emoji: "⏱️" },
-      { text: "A prova mede o que aprendi, não quem eu sou. O importante é que eu tentei fazer o meu melhor.", emoji: "🌟" }
-    ]
-  },
-  {
-    title: "Preciso Dizer \"Não\" (Limites Pessoais) 🛡️",
-    steps: [
-      { text: "Eu tenho o direito de não querer fazer algo, abraçar alguém ou emprestar minhas coisas.", emoji: "✋" },
-      { text: "Posso dizer 'não' de forma calma e firme, sem precisar gritar ou ser rude.", emoji: "🗣️" },
-      { text: "Posso usar frases como 'Não, obrigado', 'Agora não quero' ou 'Prefiro não fazer isso'.", emoji: "💬" },
-      { text: "A outra pessoa pode ficar chateada, e eu não preciso consertar o sentimento dela.", emoji: "👤" },
-      { text: "Dizer 'não' protege meu espaço e minha energia. É seguro cuidar de mim mesmo.", emoji: "🛡️" }
-    ]
-  },
-  {
-    title: "Pedindo um Intervalo (Prevenção de Crise) ⏸️",
-    steps: [
-      { text: "Às vezes, o barulho ou as luzes ficam fortes demais e meu corpo começa a ficar agitado.", emoji: "⚡" },
-      { text: "Não preciso esperar explodir. Posso perceber esse sinal e decidir que preciso de uma pausa.", emoji: "🚨" },
-      { text: "Posso mostrar meu cartão de pausa ou dizer: 'Preciso de um momento sozinho, por favor'.", emoji: "🎫" },
-      { text: "Vou para um lugar silencioso ou uso meus fones de ouvido até me sentir 'carregado' de novo.", emoji: "🎧" },
-      { text: "Pedir um intervalo é inteligente. Ajuda meu cérebro a voltar a funcionar bem.", emoji: "🔋" }
-    ]
-  },
-  {
-    title: "Mudança de Rotina (Flexibilidade Cognitiva) 🔄",
-    steps: [
-      { text: "Às vezes, as coisas não acontecem como eu planejei. Um lugar pode estar fechado ou alguém pode atrasar.", emoji: "🚧" },
-      { text: "É normal sentir frustração ou susto quando o plano muda de repente.", emoji: "😟" },
-      { text: "Posso perguntar: 'Qual é o novo plano?' ou olhar as opções que tenho agora.", emoji: "🗺️" },
-      { text: "Vou tentar seguir o novo fluxo. Se for difícil, posso pedir ajuda para me reorganizar.", emoji: "🤝" },
-      { text: "O mundo muda o tempo todo. Eu sou capaz de lidar com mudanças, uma de cada vez.", emoji: "🌱" }
-    ]
-  },
-  {
-    title: "Lidando com Erros (Perfeccionismo) ✏️",
-    steps: [
-      { text: "Todo mundo comete erros. Professores, pais e amigos erram às vezes. Eu também erro.", emoji: "🤝" },
-      { text: "Quando erro, posso querer apagar tudo ou rasgar o papel, mas posso tentar respirar primeiro.", emoji: "💨" },
-      { text: "Um erro é apenas uma chance de consertar. Posso usar a borracha ou pedir desculpas se magoei alguém.", emoji: "✏️" },
-      { text: "O erro me ensina como fazer certo na próxima vez. Ele é como um professor.", emoji: "💡" },
-      { text: "Eu sou uma boa pessoa, mesmo quando cometo erros.", emoji: "❤️" }
-    ]
-  },
-  {
-    title: "Indo a um Lugar Novo (Ansiedade Social/Sensorial) 🧭",
-    steps: [
-      { text: "Antes de ir a um lugar novo, posso olhar fotos na internet para saber como ele é.", emoji: "🖥️" },
-      { text: "Vou levar meu 'kit de conforto' (fones, óculos ou um objeto que me acalma).", emoji: "🎒" },
-      { text: "Se o lugar for muito cheio, posso procurar onde fica a saída ou um canto mais calmo.", emoji: "🚪" },
-      { text: "Não preciso ficar muito tempo se não quiser. Posso combinar um horário de saída antes de ir.", emoji: "⌚" },
-      { text: "Conhecer lugares novos pode ser difícil, mas também pode ser interessante. Estou seguro.", emoji: "🦁" }
-    ]
-  }
-];
+// NOTA: As Histórias Sociais foram integralmente preservadas e salvas em
+// src/backup/socialStoriesBackup.ts e src/backup/SocialStoriesComponent.tsx
+// para conformidade com conselhos regulatórios e futura reinstalação se desejado.
 
 // Função utilitária para mapear dinamicamente as ferramentas recomendadas baseadas no texto do conselho
 const getRecommendationsForAdvice = (text: string, triggerId: string): string[] => {
@@ -268,12 +151,30 @@ const getRecommendationsForAdvice = (text: string, triggerId: string): string[] 
     list.push("shapes");
   }
 
+  // Previsibilidade Motora & Ritmo
+  if (
+    lowerText.includes("previsibilidade") || 
+    lowerText.includes("ritmo") || 
+    lowerText.includes("mudança") || 
+    lowerText.includes("rotina") || 
+    lowerText.includes("trilha") ||
+    lowerText.includes("sequência") ||
+    lowerText.includes("padrão") ||
+    lowerText.includes("imprevisto") ||
+    triggerId === "mudanca_rotina"
+  ) {
+    list.push("predictability");
+  }
+
   // Fallback se nada for detectado
   if (list.length === 0) {
     if (triggerId === "som_alto") list.push("sound");
     else if (triggerId === "luz_forte") list.push("breath");
     else if (triggerId === "excesso_info") {
       list.push("grounding");
+      list.push("breath");
+    } else if (triggerId === "mudanca_rotina") {
+      list.push("predictability");
       list.push("breath");
     } else {
       list.push("grounding");
@@ -318,11 +219,6 @@ export default function App() {
     const saved = safeStorage.getItem("desplugatea_battery");
     return saved ? parseInt(saved, 10) : 50;
   });
-
-  // Módulo 2.9: Histórias Sociais
-  const [currentStoryIndex, setCurrentStoryIndex] = useState<number>(0);
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
-  const [showStorySelector, setShowStorySelector] = useState<boolean>(false);
 
   // Módulo 2.10: Jogo Monótono de Formas e Cores
   const [gameShapes, setGameShapes] = useState<{ id: number; type: "circle" | "square"; color: string }[]>([]);
@@ -631,7 +527,7 @@ export default function App() {
     setTimeout(() => {
       const advices = ADVICE_DATABASE[triggerId];
       if (advices && advices.length > 0) {
-        // Sorteia um conselho de forma puramente aleatória das 10 opções
+        // Sorteia uma dica prática de forma puramente aleatória das 10 opções
         const randomIndex = Math.floor(Math.random() * advices.length);
         const advice = advices[randomIndex];
         setAdviceText(advice);
@@ -639,7 +535,7 @@ export default function App() {
         // Define as recomendações automáticas de ferramentas com base no texto sorteado e tipo de gatilho
         setRecommendedTools(getRecommendationsForAdvice(advice, triggerId));
       }
-      // Finaliza o carregamento do conselho sorteado sem mover a tela
+      // Finaliza o carregamento da dica sorteada sem mover a tela
       setLoading(false);
     }, 450);
   };
@@ -858,7 +754,7 @@ export default function App() {
             </h2>
           </div>
           <p className="text-xs text-[#a1a1aa] leading-relaxed">
-            Dê um clique suave em um dos gatilhos abaixo. O sistema sorteará um conselho e indicará qual ferramenta vai te ajudar mais!
+            Dê um clique suave em um dos gatilhos abaixo. O sistema sorteará uma dica e indicará qual ferramenta vai te ajudar mais!
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -916,7 +812,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* ÁREA DE REFÚGIO E CONSELHOS DINÂMICOS ALEATÓRIOS */}
+        {/* ÁREA DE REFÚGIO E DICAS DE DESCOMPRESSÃO */}
         <section id="refugio-box" className="scroll-mt-8">
           <div className="bg-[#134e4a]/10 border border-[#2dd4bf]/20 rounded-xl p-6 md:p-8 relative overflow-hidden min-h-[220px] flex flex-col justify-between">
             
@@ -927,7 +823,7 @@ export default function App() {
 
             <div className="relative z-10 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#2dd4bf] uppercase tracking-widest">Seu Conselho Seguro Sorteado</span>
+                <span className="text-xs font-bold text-[#2dd4bf] uppercase tracking-widest">Sua Dica de Descompressão Sorteada</span>
                 {selectedTriggerId && (
                   <button 
                     onClick={() => handleTriggerClick(selectedTriggerId)}
@@ -951,7 +847,7 @@ export default function App() {
                   </p>
                 ) : (
                   <p className="text-lg md:text-xl text-[#a1a1aa] font-light leading-relaxed italic">
-                    "Tudo calmo por aqui. Escolha um dos 4 gatilhos acima para carregar na hora conselhos descontraídos e direcionamentos clínicos de apoio!"
+                    "Tudo calmo por aqui. Escolha um dos 4 gatilhos acima para carregar na hora dicas práticas e ferramentas de apoio sensorial!"
                   </p>
                 )}
               </div>
@@ -982,6 +878,10 @@ export default function App() {
                         bg = "bg-teal-500/10 border-teal-400/30 text-teal-300 hover:bg-teal-500/20";
                         text = "🧩 Organizador de Formas";
                         targetId = "shapes-tool";
+                      } else if (tool === "predictability") {
+                        bg = "bg-indigo-500/10 border-indigo-400/30 text-indigo-300 hover:bg-indigo-500/20";
+                        text = "🧭 Previsibilidade Motora";
+                        targetId = "motor-predictability-tool";
                       }
                       
                       return (
@@ -1323,124 +1223,8 @@ export default function App() {
               </div>
             </div>
 
-            {/* C. HISTÓRIAS SOCIAIS EM CARROSSEL MANUAL */}
-            <div className="bg-[#27272a] border border-[#3f3f46] rounded-xl p-6 flex flex-col justify-between min-h-[340px]">
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2 text-pink-300">
-                  <BookOpen className="w-5 h-5" />
-                  <h3 className="font-bold text-base text-[#f4f4f5]">Histórias Sociais para Previsibilidade</h3>
-                </div>
-                <p className="text-xs text-[#a1a1aa] leading-relaxed">
-                  Prepare-se mentalmente para transições complexas e quebras de rotina passo a passo, sem pressa.
-                </p>
-              </div>
-
-              {/* Seletor de Histórias por Botão e Lista */}
-              <div className="relative my-2">
-                <button
-                  onClick={() => {
-                    setShowStorySelector(!showStorySelector);
-                    triggerVibrate(30);
-                  }}
-                  className="w-full flex items-center justify-between px-4 py-2.5 bg-slate-950/60 border border-[#3f3f46] rounded-lg text-xs md:text-sm text-[#f4f4f5] font-semibold hover:bg-slate-900 transition-all cursor-pointer"
-                >
-                  <span className="flex items-center gap-2">
-                    <span>📖</span>
-                    <span>{SOCIAL_STORIES[currentStoryIndex].title}</span>
-                  </span>
-                  <span className={`transition-transform duration-200 text-[#2dd4bf] ${showStorySelector ? "rotate-180" : ""}`}>
-                    ▼
-                  </span>
-                </button>
-
-                {/* Lista Dropdown de Opções */}
-                {showStorySelector && (
-                  <div className="absolute left-0 right-0 mt-1 bg-[#18181b] border border-[#3f3f46] rounded-lg shadow-xl z-20 max-h-60 overflow-y-auto p-1.5 space-y-1">
-                    {SOCIAL_STORIES.map((story, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          setCurrentStoryIndex(idx);
-                          setCurrentStepIndex(0);
-                          setShowStorySelector(false);
-                          triggerVibrate(40);
-                        }}
-                        className={`w-full text-left px-3.5 py-2.5 rounded-md text-xs md:text-sm font-medium transition-all cursor-pointer flex items-center justify-between ${
-                          currentStoryIndex === idx
-                            ? "bg-pink-500/10 border border-pink-500/20 text-pink-300"
-                            : "hover:bg-zinc-800 text-[#a1a1aa] border border-transparent"
-                        }`}
-                      >
-                        <span>{story.title}</span>
-                        {currentStoryIndex === idx && <span className="text-pink-400 text-[10px] font-bold uppercase tracking-wider bg-pink-500/10 px-1.5 py-0.5 rounded border border-pink-500/20">Ativo</span>}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Corpo do Slide Ativo */}
-              <div className="bg-slate-950 p-4 rounded-lg border border-zinc-800 my-4 min-h-[110px] flex items-center gap-4 relative">
-                <div className="text-3xl select-none" aria-hidden="true">
-                  {SOCIAL_STORIES[currentStoryIndex].steps[currentStepIndex].emoji}
-                </div>
-                <div className="space-y-1 flex-1">
-                  <div className="text-[10px] text-zinc-500 tracking-wider uppercase font-mono">
-                    Passo {currentStepIndex + 1} de {SOCIAL_STORIES[currentStoryIndex].steps.length}
-                  </div>
-                  <p className="text-xs md:text-sm text-[#d4d4d8] leading-relaxed font-medium">
-                    {SOCIAL_STORIES[currentStoryIndex].steps[currentStepIndex].text}
-                  </p>
-                </div>
-              </div>
-
-              {/* Controles de navegação manual do carrossel */}
-              <div className="flex justify-between items-center">
-                <button
-                  onClick={() => {
-                    if (currentStepIndex > 0) {
-                      setCurrentStepIndex(c => c - 1);
-                      triggerVibrate(30);
-                    }
-                  }}
-                  disabled={currentStepIndex === 0}
-                  className="p-2 bg-zinc-800 hover:bg-zinc-750 text-zinc-300 rounded border border-zinc-700 disabled:opacity-30 cursor-pointer"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <div className="flex gap-1.5 justify-center items-center">
-                  {SOCIAL_STORIES[currentStoryIndex].steps.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        setCurrentStepIndex(idx);
-                        triggerVibrate(30);
-                      }}
-                      className={`w-8 h-5 flex items-center justify-center rounded-full text-[10px] font-bold transition-all border cursor-pointer shrink-0 ${
-                        idx === currentStepIndex
-                          ? "bg-pink-400 border-pink-400 text-zinc-950"
-                          : "bg-[#27272a] border-zinc-700 text-zinc-400 hover:border-zinc-500"
-                      }`}
-                      aria-label={`Ir para o passo ${idx + 1}`}
-                    >
-                      {idx + 1}
-                    </button>
-                  ))}
-                </div>
-                <button
-                  onClick={() => {
-                    if (currentStepIndex < SOCIAL_STORIES[currentStoryIndex].steps.length - 1) {
-                      setCurrentStepIndex(c => c + 1);
-                      triggerVibrate(30);
-                    }
-                  }}
-                  disabled={currentStepIndex === SOCIAL_STORIES[currentStoryIndex].steps.length - 1}
-                  className="p-2 bg-zinc-800 hover:bg-zinc-750 text-zinc-300 rounded border border-zinc-700 disabled:opacity-30 cursor-pointer"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+            {/* C. PREVISIBILIDADE MOTORA & RITMO (JOGO DE ANTECIPAÇÃO E TRILHA CONTÍNUA) */}
+            <MotorPredictabilityTool onVibrate={triggerVibrate} />
 
             {/* D. JOGO DE ORGANIZAÇÃO REPETITIVA (Monótono e Relaxante) */}
             <div id="shapes-tool" className="bg-[#27272a] border border-[#3f3f46] rounded-xl p-4 sm:p-6 flex flex-col justify-between min-h-[340px] transition-all duration-500">
